@@ -1,6 +1,8 @@
 import os
 import pandas as pd
+import tarfile
 from torchvision.io import read_image
+import io
 
 
 class Fakeddit(Dataset):
@@ -12,8 +14,11 @@ class Fakeddit(Dataset):
     def __len__(self):
         return len(self.img_labels)
     def __getitem__(self, idx):
-        img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, "id"])
-        image = read_image(img_path)
+        with tarfile.open(self.img_dir,'r:bz2') as tar:
+            img_dir_without_tar = tarfile.os.path.splitext(self.img_dir)[0]
+            img_path = os.path.join(img_dir_without_tar, self.img_labels.iloc[idx, "id"])
+            img_data = tar.extractfile(img_path).read()
+            image = read_image(io.BytesIO(img_data))
         label = self.img_labels.iloc[idx, "2_way_label"]
         if self.transform:
             image = self.transform(image)            

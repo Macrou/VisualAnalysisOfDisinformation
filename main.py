@@ -15,7 +15,7 @@ import os
 import argparse
 
 from models import *
-from utils import progress_bar
+from utils import progress_bar, get_mean_and_std
 import matplotlib.pyplot as plt
 from fakedditDataLoader import *
 
@@ -41,12 +41,12 @@ transform_test = transforms.Compose([
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
 ])
 
-trainset = Fakeddit("multimodal_only_samples/multimodal_train.tsv","public_images",transform_train) 
+trainset = Fakeddit("multimodal_only_samples/multimodal_train.tsv","public_images") 
 trainloader = torch.utils.data.Dataloader(
     trainset,batch_size=128, shuffle=True, num_workers=2
 )
 
-testset = Fakeddit("multimodal_only_samples/multimodal_test.tsv","public_images",transform_train)
+testset = Fakeddit("multimodal_only_samples/multimodal_test.tsv","public_images")
 testloader = torch.utils.data.Dataloader(
     testset,batch_size=100, shuffle=False, num_workers=2
 )
@@ -160,10 +160,12 @@ def plotFigures():
 
 
 if __name__ == "__main__":
-
-    for epoch in range(start_epoch, start_epoch+100):
-        train(epoch)
-        test(epoch)
+    trainmean,trainstd = get_mean_and_std(trainset)
+    testmean,trainstd =    get_mean_and_std(testset)
+    print(f"the mean and deviation for training are {trainmean} {trainstd} and for test are {testmean} and {trainstd}")
+    # for epoch in range(start_epoch, start_epoch+100):
+    #     train(epoch)
+    #     test(epoch)
         #scheduler.step()
     plotFigures()
     #plotFeatureMaps()

@@ -17,10 +17,10 @@ class Fakeddit(Dataset):
     def __getitem__(self, idx):
         with tarfile.open(self.img_dir,'r:bz2') as tar:
             img_dir_without_tar = tarfile.os.path.splitext(self.img_dir)[0]
-            img_path = os.path.join(img_dir_without_tar, self.img_labels.iloc[idx, "id"])
+            img_path = os.path.join(img_dir_without_tar, self.img_labels.iloc[idx, 5])
             img_data = tar.extractfile(img_path).read()
             image = read_image(io.BytesIO(img_data))
-        label = self.img_labels.iloc[idx, "2_way_label"]
+        label = self.img_labels.iloc[idx, 13]
         if self.transform:
             image = self.transform(image)            
         if self.target_transform:

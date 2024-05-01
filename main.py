@@ -41,17 +41,17 @@ transform_test = transforms.Compose([
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
 ])
 
-trainset = Fakeddit("dataset/multimodal_only_samples/multimodal_train.tsv","dataset/public_images.tar.bz2 ") 
-trainloader = torch.utils.data.Dataloader(
+trainset = Fakeddit("dataset/multimodal_only_samples/multimodal_train.tsv","dataset/public_images.tar.bz2") 
+trainloader = torch.utils.data.DataLoader(
     trainset,batch_size=128, shuffle=True, num_workers=2
 )
 
-testset = Fakeddit("dataset/multimodal_only_samples/multimodal_test.tsv","dataset/public_images.tar.bz2")
-testloader = torch.utils.data.Dataloader(
+testset = Fakeddit("dataset/multimodal_only_samples/multimodal_test_public.tsv","dataset/public_images.tar.bz2")
+testloader = torch.utils.data.DataLoader(
     testset,batch_size=100, shuffle=False, num_workers=2
 )
 
-classes = ('true','false')
+classes = ('false','true')
 
 trainlossplt = np.array([])
 testlossplt = np.array([])
@@ -146,7 +146,7 @@ def plotFigures():
     plt.ylabel('Loss')
     plt.legend()
     plt.grid(True)
-    plt.savefig(fname='figures/loss.png',format='png')
+    plt.savefig(fname='results/plots/loss.png',format='png')
 
     plt.figure(figsize=(10, 5))
     plt.plot(epochs, trainaccuracy, 'bo-', label='Training Accuracy')
@@ -156,16 +156,16 @@ def plotFigures():
     plt.ylabel('Accuracy')
     plt.legend()
     plt.grid(True)
-    plt.savefig(fname='figures/trainingAccuracy.png',format='png')
+    plt.savefig(fname='results/plots/trainingAccuracy.png',format='png')
 
 
 if __name__ == "__main__":
-    trainmean,trainstd = get_mean_and_std(trainset)
-    testmean,trainstd =    get_mean_and_std(testset)
-    print(f"the mean and deviation for training are {trainmean} {trainstd} and for test are {testmean} and {trainstd}")
-    # for epoch in range(start_epoch, start_epoch+100):
-    #     train(epoch)
-    #     test(epoch)
+    # trainmean,trainstd = get_mean_and_std(trainset)
+    # testmean,trainstd =    get_mean_and_std(testset)
+    # print(f"the mean and deviation for training are {trainmean} {trainstd} and for test are {testmean} and {trainstd}")
+    for epoch in range(start_epoch, start_epoch+100):
+        train(epoch)
+        test(epoch)
         #scheduler.step()
     plotFigures()
     #plotFeatureMaps()

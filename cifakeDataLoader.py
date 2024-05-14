@@ -7,7 +7,7 @@ import io
 
 
 class Fakeddit(Dataset):
-    def __init__(self,annotations_file, img_dir="dataset/public_images.tar.bz2", transform=None, target_transform=None):
+    def __init__(self,annotations_file, img_dir, transform=None, target_transform=None):
         self.img_labels = pd.read_csv(annotations_file,sep='\t')
         self.img_dir = img_dir
         self.transform = transform

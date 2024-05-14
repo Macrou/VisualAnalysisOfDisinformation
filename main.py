@@ -6,7 +6,7 @@ import torch.backends.cudnn as cudnn
 
 import torch.utils
 import torch.utils
-import torchvision
+from torchvision import datasets 
 import torchvision.transforms as transforms
 
 import numpy as np
@@ -41,17 +41,17 @@ transform_test = transforms.Compose([
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
 ])
 
-trainset = Fakeddit("dataset/multimodal_only_samples/multimodal_train.tsv","dataset/public_images.tar.bz2") 
+trainset = datasets.ImageFolder(root='/train')
 trainloader = torch.utils.data.DataLoader(
     trainset,batch_size=128, shuffle=True, num_workers=2
 )
 
-testset = Fakeddit("dataset/multimodal_only_samples/multimodal_test_public.tsv","dataset/public_images.tar.bz2")
+testset = datasets.ImageFolder(root='/test')
 testloader = torch.utils.data.DataLoader(
     testset,batch_size=100, shuffle=False, num_workers=2
 )
 
-classes = ('false','true')
+classes = ('false','real')
 
 trainlossplt = np.array([])
 testlossplt = np.array([])
@@ -158,14 +158,18 @@ def plotFigures():
     plt.grid(True)
     plt.savefig(fname='results/plots/trainingAccuracy.png',format='png')
 
+def printMeanAndDiv():
+    print('==> Calculating mean for training')
+    trainmean,trainstd = get_mean_and_std(trainset)
+    print('==> Calculating mean for test')
+    testmean,trainstd =    get_mean_and_std(testset)
+    print(f"the mean and deviation for training are {trainmean} {trainstd} and for test are {testmean} and {trainstd}")
 
 if __name__ == "__main__":
-    # trainmean,trainstd = get_mean_and_std(trainset)
-    # testmean,trainstd =    get_mean_and_std(testset)
-    # print(f"the mean and deviation for training are {trainmean} {trainstd} and for test are {testmean} and {trainstd}")
-    for epoch in range(start_epoch, start_epoch+100):
-        train(epoch)
-        test(epoch)
+    printMeanAndDiv()
+    # for epoch in range(start_epoch, start_epoch+100):
+    #     train(epoch)
+    #     test(epoch)
         #scheduler.step()
     plotFigures()
     #plotFeatureMaps()

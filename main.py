@@ -166,10 +166,9 @@ def printMeanAndDiv():
     print(f"the mean and deviation for training are {trainmean} {trainstd} and for test are {testmean} and {trainstd}")
 
 if __name__ == "__main__":
-    printMeanAndDiv()
-    # for epoch in range(start_epoch, start_epoch+100):
-    #     train(epoch)
-    #     test(epoch)
+    for epoch in range(start_epoch, start_epoch+100):
+        train(epoch)
+        test(epoch)
         #scheduler.step()
-    #plotFigures()
+    plotFigures()
     #plotFeatureMaps()

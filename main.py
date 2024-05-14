@@ -137,7 +137,7 @@ def test(epoch):
         best_acc = acc
 
 def plotFigures():
-    epochs = range(start_epoch, start_epoch+100)
+    epochs = range(start_epoch, start_epoch+15)
     plt.figure(figsize=(10, 5))
     plt.plot(epochs, trainlossplt, 'bo-', label='Training Loss')
     plt.plot(epochs, testlossplt, 'ro-', label='Test Loss')
@@ -166,7 +166,7 @@ def printMeanAndDiv():
     print(f"the mean and deviation for training are {trainmean} {trainstd} and for test are {testmean} and {trainstd}")
 
 if __name__ == "__main__":
-    for epoch in range(start_epoch, start_epoch+100):
+    for epoch in range(start_epoch, start_epoch+15):
         train(epoch)
         test(epoch)
         #scheduler.step()

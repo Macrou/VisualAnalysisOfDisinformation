@@ -33,12 +33,12 @@ transform_train = transforms.Compose([
     transforms.RandomCrop(32, padding=4),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
-    #transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+    transforms.Normalize((0.4098, 0.4006, 0.3614), (0.2039, 0.2024, 0.2026)),
 ])
 
 transform_test = transforms.Compose([
     transforms.ToTensor(),
-    #transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+    transforms.Normalize((0.4730, 0.4637, 0.4186), (0.2039, 0.2024, 0.2026)),
 ])
 
 trainset = datasets.ImageFolder(root='dataset/cifake/train',transform=transform_train)
@@ -171,5 +171,5 @@ if __name__ == "__main__":
     #     train(epoch)
     #     test(epoch)
         #scheduler.step()
-    plotFigures()
+    #plotFigures()
     #plotFeatureMaps()

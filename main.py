@@ -43,7 +43,7 @@ transform_test = transforms.Compose([
 
 trainset = datasets.ImageFolder(root='dataset/cifake/train',transform=transform_train)
 trainloader = torch.utils.data.DataLoader(
-    trainset,batch_size=128, shuffle=True, num_workers=4
+    trainset,batch_size=256, shuffle=True, num_workers=4
 )
 
 testset = datasets.ImageFolder(root='dataset/cifake/test',transform=transform_test)

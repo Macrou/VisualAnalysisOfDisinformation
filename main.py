@@ -21,6 +21,9 @@ from fakedditDataLoader import *
 
 parser = argparse.ArgumentParser(description='PyTorch Disinformation Training')
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
+parser.add_argument('--ep',default=15,type=int,help='maximum epoch')
+parser.add_argument('--resume', '-r', action='store_true',
+                    help='resume from checkpoint')
 args = parser.parse_args()
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -65,6 +68,14 @@ net = net.to(device)
 if device == 'cuda':
     net = torch.nn.DataParallel(net)
     cudnn.benchmark = True
+if args.resume:
+    # Load checkpoint.
+    print('==> Resuming from checkpoint..')
+    assert os.path.isdir('checkpoint'), 'Error: no checkpoint directory found!'
+    checkpoint = torch.load('./checkpoint/ckpt.pth')
+    net.load_state_dict(checkpoint['net'])
+    best_acc = checkpoint['acc']
+    start_epoch = checkpoint['epoch']
 
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(net.parameters(), lr=args.lr,
@@ -137,7 +148,7 @@ def test(epoch):
         best_acc = acc
 
 def plotFigures():
-    epochs = range(start_epoch, start_epoch+15)
+    epochs = range(start_epoch, start_epoch+args.ep)
     plt.figure(figsize=(10, 5))
     plt.plot(epochs, trainlossplt, 'bo-', label='Training Loss')
     plt.plot(epochs, testlossplt, 'ro-', label='Test Loss')
@@ -166,7 +177,7 @@ def printMeanAndDiv():
     print(f"the mean and deviation for training are {trainmean} {trainstd} and for test are {testmean} and {trainstd}")
 
 if __name__ == "__main__":
-    for epoch in range(start_epoch, start_epoch+15):
+    for epoch in range(start_epoch, start_epoch + args.ep):
         train(epoch)
         test(epoch)
         #scheduler.step()

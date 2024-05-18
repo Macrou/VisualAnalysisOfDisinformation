@@ -44,12 +44,12 @@ transform_test = transforms.Compose([
     transforms.Normalize((0.4730, 0.4637, 0.4186), (0.2039, 0.2024, 0.2026)),
 ])
 
-trainset = datasets.ImageFolder(root='dataset/cifake/train',transform=transform_train)
+trainset = Fakeddit(annotations_file="../multimodal_only_samples/multimodal_train.tsv",img_dir="../dataset/publicImg.tar.bz2",transform=transform_train)
 trainloader = torch.utils.data.DataLoader(
     trainset,batch_size=256, shuffle=True, num_workers=4
 )
 
-testset = datasets.ImageFolder(root='dataset/cifake/test',transform=transform_test)
+testset = Fakeddit(annotations_file="../multimodal_only_samples/multimodal_test_public.tsv",img_dir="../dataset/publicImg.tar.bz2",transform=transform_test)
 testloader = torch.utils.data.DataLoader(
     testset,batch_size=100, shuffle=False, num_workers=4
 )

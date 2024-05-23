@@ -44,14 +44,14 @@ transform_test = transforms.Compose([
     transforms.Normalize((0.4730, 0.4637, 0.4186), (0.2039, 0.2024, 0.2026)),
 ])
 
-trainset = Fakeddit(annotations_file="../multimodal_only_samples/multimodal_train.tsv",img_dir="../dataset/publicImg.tar.bz2",transform=transform_train)
+trainset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",img_dir="./dataset/public_images.tar.bz2")
 trainloader = torch.utils.data.DataLoader(
-    trainset,batch_size=256, shuffle=True, num_workers=4
+    trainset,batch_size=256, shuffle=True, num_workers=2
 )
 
-testset = Fakeddit(annotations_file="../multimodal_only_samples/multimodal_test_public.tsv",img_dir="../dataset/publicImg.tar.bz2",transform=transform_test)
+testset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",img_dir="./dataset/public_images.tar.bz2",transform=transform_test)
 testloader = torch.utils.data.DataLoader(
-    testset,batch_size=100, shuffle=False, num_workers=4
+    testset,batch_size=100, shuffle=False, num_workers=2
 )
 
 classes = ('false','real')
@@ -94,7 +94,7 @@ def train(epoch):
         # print(outputs_1.shape)
         # plt.imshow(outputs_1[0,0,:,:].cpu().detach().numpy())
         # plt.show()
-        
+        print(batch_idx)
         loss = criterion(outputs, targets)
         loss.backward()
         optimizer.step()

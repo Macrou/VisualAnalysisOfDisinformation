@@ -9,9 +9,10 @@ import io
 class Fakeddit(Dataset):
 
     def __init__(self,annotations_file, img_dir="dataset/public_images.tar.bz2", transform=None, target_transform=None):
-        self.id = pd.read_csv(annotations_file,sep='\t',index_col= 'id').index.values
+        anotations = pd.read_csv(annotations_file,sep='\t')
+        self.id = anotations['id'].values
         self.img_dir = img_dir
-        self.img_labels = pd.read_csv(annotations_file,sep='\t',index_col= '2_way_label').index.values
+        self.img_labels = anotations['2_way_label'].values
         self.transform = transform
         self.target_transform = target_transform
         self.tf = tarfile.open(self.img_dir,'r:bz2')

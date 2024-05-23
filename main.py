@@ -33,6 +33,7 @@ start_epoch = 0  # start from epoch 0 or last checkpoint epoch
 # Data
 print('==> Preparing data..')
 transform_train = transforms.Compose([
+    transforms.Resize((224,224)),
     transforms.RandomCrop(32, padding=4),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
@@ -177,9 +178,10 @@ def printMeanAndDiv():
     print(f"the mean and deviation for training are {trainmean} {trainstd} and for test are {testmean} and {trainstd}")
 
 if __name__ == "__main__":
-    for epoch in range(start_epoch, start_epoch + args.ep):
-        train(epoch)
-        test(epoch)
+    # for epoch in range(start_epoch, start_epoch + args.ep):
+    #     train(epoch)
+    #     test(epoch)
         #scheduler.step()
-    plotFigures()
+    # plotFigures()
+    printMeanAndDiv()
     #plotFeatureMaps()

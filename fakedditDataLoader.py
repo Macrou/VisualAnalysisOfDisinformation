@@ -15,16 +15,15 @@ class Fakeddit(Dataset):
         self.img_labels = anotations['2_way_label'].values
         self.transform = transform
         self.target_transform = target_transform
-        self.tf = tarfile.open(self.img_dir,'r:bz2')
 
-    def get_image_from_tar(self, name):
+    def get_image_from_tar(self,tar ,name):
         """
         Gets a image by a name gathered from file list csv file
 
         :param name: name of targeted image
         :return: a PIL image
         """
-        image = self.tf.extractfile(name)
+        image = tar.extractfile(name)
         image = image.read()
         image = Image.open(io.BytesIO(image))
         return image
@@ -33,10 +32,8 @@ class Fakeddit(Dataset):
         return len(self.img_labels)
 
     def __getitem__(self, idx):
-        print(self.img_labels[0])
-        if idx == (self.__len__() - 1) :  # close tarfile opened in __init__
-            self.tf.close()
-        image = self.get_image_from_tar(self.id[idx])
+        with tarfile.open(self.img_dir,'r:bz2') as tar:
+            image = self.get_image_from_tar(tar,self.id[idx])
         label = self.img_labels[idx]
         if self.transform:
             image = self.transform(image)

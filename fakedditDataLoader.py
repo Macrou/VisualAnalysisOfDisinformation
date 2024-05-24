@@ -23,7 +23,8 @@ class Fakeddit(Dataset):
         :param name: name of targeted image
         :return: a PIL image
         """
-        image = tar.extractfile(name)
+        path = os.path.join(self.img_dir[:-8],name)
+        image = tar.extractfile(path = path)
         image = image.read()
         image = Image.open(io.BytesIO(image))
         return image

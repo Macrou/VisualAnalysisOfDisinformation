@@ -24,6 +24,7 @@ class Fakeddit(Dataset):
         :return: a PIL image
         """
         try:
+            name = name + '.jpg'
             image = tar.extractfile(name)
             if image is None:
                 raise KeyError(f"Filename '{name}' not found in tar archive.")

@@ -23,17 +23,13 @@ class Fakeddit(Dataset):
         :param name: name of targeted image
         :return: a PIL image
         """
-        try:
-            name = name + '.jpg'
-            image = tar.extractfile(name)
-            if image is None:
-                raise KeyError(f"Filename '{name}' not found in tar archive.")
-            image = image.read()
-            image = Image.open(io.BytesIO(image))
-            return image
-        except KeyError as e:
-            print(e)
-            return None
+        name = name + '.jpg'
+        path = os.path.join(self.img_dir[:-8],name)
+        image = tar.extractfile(name)
+        image = image.read()
+        image = Image.open(io.BytesIO(image))
+        return image
+
 
     def __len__(self):
         return len(self.img_labels)

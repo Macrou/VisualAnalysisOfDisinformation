@@ -1,9 +1,10 @@
 import os
+import io
 import pandas as pd
 import tarfile
 from torch.utils.data import Dataset
 from torchvision.io import read_image
-import io
+from PIL import Image
 
 
 class Fakeddit(Dataset):
@@ -24,8 +25,8 @@ class Fakeddit(Dataset):
         :return: a PIL image
         """
         name = name + '.jpg'
-        path = os.path.join(self.img_dir[:-8],name)
-        image = tar.extractfile(name)
+        path = os.path.join('public_image_set',name)
+        image = tar.extractfile(path)
         image = image.read()
         image = Image.open(io.BytesIO(image))
         return image

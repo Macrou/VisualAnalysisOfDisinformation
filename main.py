@@ -37,12 +37,12 @@ transform_train = transforms.Compose([
     transforms.RandomCrop(32, padding=4),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
-    transforms.Normalize((0.4098, 0.4006, 0.3614), (0.2039, 0.2024, 0.2026)),
+   # transforms.Normalize((0.4098, 0.4006, 0.3614), (0.2039, 0.2024, 0.2026)),
 ])
 
 transform_test = transforms.Compose([
     transforms.ToTensor(),
-    transforms.Normalize((0.4730, 0.4637, 0.4186), (0.2039, 0.2024, 0.2026)),
+   # transforms.Normalize((0.4730, 0.4637, 0.4186), (0.2039, 0.2024, 0.2026)),
 ])
 
 trainset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",img_dir="./dataset/public_images.tar.bz2")

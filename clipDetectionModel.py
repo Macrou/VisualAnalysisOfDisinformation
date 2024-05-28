@@ -18,7 +18,9 @@ import argparse
 
 from models import *
 from utils import progress_bar, get_mean_and_std
+import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.linear_model import LogisticRegression
 from fakedditDataLoader import *
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -46,12 +48,15 @@ def get_features(dataset):
 
 train_features, train_labels = get_features(train)
 test_features, test_labels = get_features(test)
+scores = {}
+for C in (10**k for k in range(-6, 6)):
+    classifier = LogisticRegression(random_state=0, C=C, max_iter=1000, verbose=1)
+    classifier.fit(train_features, train_labels)
+    scores[C] = {'train accuracy': classifier.score(train_features, train_labels), 
+                 'test accuracy': classifier.score(test_features, test_labels)}
 
-classifier = LogisticRegression(random_state=0, C=0.316, max_iter=1000, verbose=1)
-classifier.fit(train_features, train_labels)
+fig, axs = plt.subplots(figsize=(12, 4))    
+pd.DataFrame.from_dict(scores, 'index').plot(ax=axs,logx=True, xlabel='C', ylabel='accuracy');
+plt.savefig(fname='results/plots/trainingAccuracy.png',format='png')
 
-# Evaluate using the logistic regression classifier
-predictions = classifier.predict(test_features)
-accuracy = np.mean((test_labels == predictions).astype(float)) * 100.
-print(f"Accuracy = {accuracy:.3f}")
 

@@ -45,7 +45,7 @@ transform_test = transforms.Compose([
    # transforms.Normalize((0.4730, 0.4637, 0.4186), (0.2039, 0.2024, 0.2026)),
 ])
 
-trainset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",img_dir="./dataset/public_images.tar.bz2")
+trainset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",img_dir="./dataset/public_images.tar.bz2",transform=transform_train)
 trainloader = torch.utils.data.DataLoader(
     trainset,batch_size=256, shuffle=True, num_workers=2
 )

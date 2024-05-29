@@ -9,7 +9,7 @@ from PIL import Image
 
 class Fakeddit(Dataset):
 
-    def __init__(self,annotations_file, img_dir="dataset/public_images.tar.bz2", transform=None, target_transform=None):
+    def __init__(self,annotations_file, img_dir="dataset/public_image_set", transform=None, target_transform=None):
         anotations = pd.read_csv(annotations_file,sep='\t')
         self.id = anotations['id'].values
         self.img_dir = img_dir
@@ -22,7 +22,7 @@ class Fakeddit(Dataset):
 
     def __getitem__(self, idx):
         name = name + '.jpg'
-        path = os.path.join('public_image_set',name)
+        path = os.path.join(self.img_dir,name)
         image  = read_image(path)
         label = self.img_labels[idx]
         if self.transform:

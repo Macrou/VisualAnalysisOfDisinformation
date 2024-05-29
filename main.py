@@ -17,7 +17,7 @@ import argparse
 from models import *
 from utils import progress_bar, get_mean_and_std
 import matplotlib.pyplot as plt
-from fakedditDataLoader import *
+from fakedditDataLoaderTarLess import *
 
 parser = argparse.ArgumentParser(description='PyTorch Disinformation Training')
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
@@ -45,14 +45,14 @@ transform_test = transforms.Compose([
    # transforms.Normalize((0.4730, 0.4637, 0.4186), (0.2039, 0.2024, 0.2026)),
 ])
 
-trainset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",img_dir="./dataset/public_images.tar.bz2",transform=transform_train)
+trainset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=transform_train)
 trainloader = torch.utils.data.DataLoader(
-    trainset,batch_size=256, shuffle=True, num_workers=2
+    trainset,batch_size=256, shuffle=True, num_workers=4
 )
 
-testset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",img_dir="./dataset/public_images.tar.bz2",transform=transform_test)
+testset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=transform_test)
 testloader = torch.utils.data.DataLoader(
-    testset,batch_size=100, shuffle=False, num_workers=2
+    testset,batch_size=100, shuffle=False, num_workers=4
 )
 
 classes = ('false','real')
@@ -178,10 +178,10 @@ def printMeanAndDiv():
     print(f"the mean and deviation for training are {trainmean} {trainstd} and for test are {testmean} and {trainstd}")
 
 if __name__ == "__main__":
-    # for epoch in range(start_epoch, start_epoch + args.ep):
-    #     train(epoch)
-    #     test(epoch)
+   # for epoch in range(start_epoch, start_epoch + args.ep):
+   #     train(epoch)
+   #     test(epoch)
         #scheduler.step()
-    # plotFigures()
+   # plotFigures()
     printMeanAndDiv()
     #plotFeatureMaps()

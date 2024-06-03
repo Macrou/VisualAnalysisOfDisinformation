@@ -4,11 +4,13 @@ import torch.optim as optim
 import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
 
-import torch.utils 
+import torch.utils
+from torch.utils.data import DataLoader
 from torchvision import datasets 
 import torchvision.transforms as transforms
 
 import clip
+from fakedditDataLoaderTarLess import Fakeddit
 
 import numpy as np
 import pandas as pd
@@ -25,11 +27,11 @@ from models import *
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load('ViT-B/32', device) 
 
-train = datasets.ImageFolder(root='dataset/cifake/train',transform=preprocess)
-test = datasets.ImageFolder(root='dataset/cifake/test',transform=preprocess)
+#train = datasets.ImageFolder(root='dataset/cifake/train',transform=preprocess)
+#test = datasets.ImageFolder(root='dataset/cifake/test',transform=preprocess)
 
-#train =  Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",img_dir="./dataset/public_images.tar.bz2",transform=preprocess)
-#test = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",img_dir="./dataset/public_images.tar.bz2",transform=preprocess)
+train =  Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=preprocess)
+test = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=preprocess)
 
 classes = ('false','real')
 
@@ -39,17 +41,20 @@ def get_features(dataset):
     all_labels = []
 
     with torch.no_grad():
-        for images, labels in tqdm(torch.utils.datasets.DataLoader(dataset, batch_size=100)):
+        for images, labels in tqdm(DataLoader(dataset, batch_size=100)):
             features = model.encode_image(images.to(device))
 
             all_features.append(features)
             all_labels.append(labels)
 
     return torch.cat(all_features).cpu().numpy(), torch.cat(all_labels).cpu().numpy()
-
+print('==> Getting features ')
 train_features, train_labels = get_features(train)
 test_features, test_labels = get_features(test)
 scores = {}
+
+print('==> Calculating Regression')
+
 for C in (10**k for k in range(-6, 6)):
     classifier = LogisticRegression(random_state=0, C=C, max_iter=1000, verbose=1)
     classifier.fit(train_features, train_labels)

@@ -1,5 +1,5 @@
 import os
-import io
+from skimage import io, transform
 import pandas as pd
 import tarfile
 from torch.utils.data import Dataset
@@ -21,9 +21,9 @@ class Fakeddit(Dataset):
         return len(self.img_labels)
 
     def __getitem__(self, idx):
-        name = name + '.jpg'
+        name = self.id[idx] + '.jpg'
         path = os.path.join(self.img_dir,name)
-        image  = read_image(path)
+        image  = io.imread(path)
         label = self.img_labels[idx]
         if self.transform:
             image = self.transform(image)

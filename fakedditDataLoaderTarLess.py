@@ -23,7 +23,11 @@ class Fakeddit(Dataset):
     def __getitem__(self, idx):
         name = self.id[idx] + '.jpg'
         path = os.path.join(self.img_dir,name)
-        image  = io.imread(path)
+        try:
+            image  = Image.open(path).convert('RGB')
+        except UnidentifiedImageError:
+            print(f"UnidentifiedImageError: Cannot identify image file {path}")
+            image = Image.fromarray(np.zeros((224, 224, 3), dtype=np.uint8))  # Adjust dimensions as needed
         label = self.img_labels[idx]
         if self.transform:
             image = self.transform(image)

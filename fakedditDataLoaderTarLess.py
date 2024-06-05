@@ -2,9 +2,10 @@ import os
 from skimage import io, transform
 import pandas as pd
 import tarfile
+import numpy as np
 from torch.utils.data import Dataset
 from torchvision.io import read_image
-from PIL import Image
+from PIL import Image,UnidentifiedImageError
 
 
 class Fakeddit(Dataset):

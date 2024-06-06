@@ -10,7 +10,7 @@ from torchvision import datasets
 import torchvision.transforms as transforms
 
 import clip
-from fakedditDataLoaderTarLess import Fakeddit
+from fakeddit_data_loader import Fakeddit
 
 import numpy as np
 import pandas as pd

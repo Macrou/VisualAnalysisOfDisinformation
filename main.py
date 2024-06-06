@@ -17,7 +17,7 @@ import argparse
 from models import *
 from utils import progress_bar, get_mean_and_std
 import matplotlib.pyplot as plt
-from fakedditDataLoaderTarLess import *
+from fakeddit_data_loader import *
 
 parser = argparse.ArgumentParser(description='PyTorch Disinformation Training')
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')

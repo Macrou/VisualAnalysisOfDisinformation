@@ -7,6 +7,8 @@ from torch.utils.data import Dataset
 from torchvision.io import read_image
 from PIL import Image,UnidentifiedImageError
 
+Image.MAX_IMAGE_PIXELS = None
+
 
 class Fakeddit(Dataset):
 
@@ -26,8 +28,8 @@ class Fakeddit(Dataset):
         path = os.path.join(self.img_dir,name)
         try:
             image  = Image.open(path).convert('RGB')
-        except UnidentifiedImageError:
-            print(f"UnidentifiedImageError: Cannot identify image file {path}")
+        except (UnidentifiedImageError, OSError, IOError) as e: 
+            print(f"Error loading image {path}: {e}")
             image = Image.fromarray(np.zeros((224, 224, 3), dtype=np.uint8))  # Adjust dimensions as needed
         label = self.img_labels[idx]
         if self.transform:

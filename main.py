@@ -50,7 +50,7 @@ trainloader = torch.utils.data.DataLoader(
     trainset,batch_size=256, shuffle=True, num_workers=4
 )
 
-testset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv")
+testset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=transform_test)
 testloader = torch.utils.data.DataLoader(
     testset,batch_size=100, shuffle=False, num_workers=4
 )

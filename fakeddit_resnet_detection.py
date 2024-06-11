@@ -1,22 +1,17 @@
+import os
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torch.nn.functional as F
 import torch.backends.cudnn as cudnn
-
 import torch.utils
-
-from torchvision import datasets 
 import torchvision.transforms as transforms
-
 import numpy as np
+import matplotlib.pyplot as plt
 
-import os
 import argparse
-
 from models import *
 from utils import progress_bar, get_mean_and_std
-import matplotlib.pyplot as plt
 from fakeddit_data_loader import *
 
 parser = argparse.ArgumentParser(description='PyTorch Disinformation Training')
@@ -45,12 +40,14 @@ transform_test = transforms.Compose([
     transforms.Normalize((0.4707, 0.4399, 0.4118), (0.2375, 0.2286, 0.2279)),
 ])
 
-trainset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=transform_train)
+trainset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",
+                    transform=transform_train)
 trainloader = torch.utils.data.DataLoader(
     trainset,batch_size=256, shuffle=True, num_workers=4
 )
 
-testset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=transform_test)
+testset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",
+                   transform=transform_test)
 testloader = torch.utils.data.DataLoader(
     testset,batch_size=100, shuffle=False, num_workers=4
 )
@@ -148,7 +145,7 @@ def test(epoch):
 
         best_acc = acc
 
-def plotFigures():
+def plot_figures():
     epochs = range(start_epoch, start_epoch+args.ep)
     plt.figure(figsize=(10, 5))
     plt.plot(epochs, trainlossplt, 'bo-', label='Training Loss')
@@ -170,7 +167,7 @@ def plotFigures():
     plt.grid(True)
     plt.savefig(fname='results/plots/trainingAccuracy.png',format='png')
 
-def printMeanAndDiv():
+def print_mean_and_div():
     print('==> Calculating mean for training')
     trainmean,trainstd = get_mean_and_std(trainset)
     print('==> Calculating mean for test')
@@ -178,10 +175,10 @@ def printMeanAndDiv():
     print(f"the mean and deviation for training are {trainmean} {trainstd} and for test are {testmean} and {trainstd}")
 
 if __name__ == "__main__":
-   for epoch in range(start_epoch, start_epoch + args.ep):
-       train(epoch)
-       test(epoch)
+    for epoch in range(start_epoch, start_epoch + args.ep):
+        train(epoch)
+        test(epoch)
        #scheduler.step()
-   plotFigures()
-    #printMeanAndDiv()
+    plot_figures()
+    #print_mean_and_div()
 

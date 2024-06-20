@@ -13,6 +13,7 @@ import argparse
 from models import *
 from utils import progress_bar, get_mean_and_std
 from fakeddit_data_loader import *
+from torchvision.models import resnet34,ResNet34_Weights
 
 parser = argparse.ArgumentParser(description='PyTorch Disinformation Training')
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
@@ -36,6 +37,7 @@ transform_train = transforms.Compose([
 ])
 
 transform_test = transforms.Compose([
+    transforms.Resize((224,224)),
     transforms.ToTensor(),
     transforms.Normalize((0.4707, 0.4399, 0.4118), (0.2375, 0.2286, 0.2279)),
 ])
@@ -43,7 +45,7 @@ transform_test = transforms.Compose([
 trainset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",
                     transform=transform_train)
 trainloader = torch.utils.data.DataLoader(
-    trainset,batch_size=256, shuffle=True, num_workers=4
+    trainset,batch_size=128, shuffle=True, num_workers=4
 )
 
 testset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_validate.tsv",
@@ -61,7 +63,7 @@ testaccuracy = np.array([])
 
 # Model
 print('==> Building model..')
-net = ResNet34()
+net = resnet34()
 net = net.to(device)
 if device == 'cuda':
     net = torch.nn.DataParallel(net)

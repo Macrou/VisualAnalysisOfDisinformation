@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from wordcloud import WordCloud
 
+Image.MAX_IMAGE_PIXELS = None
 
 def clean_data(annotations_file,new_annotations_file ,img_dir="dataset/public_image_set"):
     """Cleans the data set of faulty images.Checks if there is an exception and
@@ -26,9 +27,10 @@ def clean_data(annotations_file,new_annotations_file ,img_dir="dataset/public_im
     """
     error_count = 0
     annotations = pd.read_csv(annotations_file,sep='\t',index_col='id')
-    indices = annotations['id'].values
+    indices = annotations.index.values
     for index in indices:
-        path = os.path.join(img_dir,index)
+        name = index + '.jpg'
+        path = os.path.join(img_dir,name)
         try:
             img = Image.open(path)
             img.verify()
@@ -51,7 +53,7 @@ def label_distribution(df):
     plt.xlabel('Label')
     plt.ylabel('Frequency')
     plt.savefig(fname='results/plots/labelFrequency.png',format='png')
-
+    plt.clf()
 def title_analyzer(df):
     """Plots the word cloud with the most common words in the clean titles of the dataset,
     and prints 10 of the most common words in the title
@@ -64,7 +66,10 @@ def title_analyzer(df):
     plt.imshow(wordcloud, interpolation='bilinear')
     plt.axis('off')
     plt.savefig(fname='results/plots/wordCloud.png',format='png')
+    plt.title('Word cloud')
+    plt.clf()
     df['title_length'] = df['clean_title'].apply(len)
+    print(df['title_length'].describe())
     word_counts = Counter(" ".join(df['clean_title']).split())
     print(word_counts.most_common(10))
 
@@ -128,10 +133,4 @@ def eda(annotations_file):
 
 
 if __name__ == "__main__":
-    clean_data(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",
-               new_annotations_file="./results/multimodal_only_samples/multimodal_train.tsv")
-    clean_data(annotations_file="./dataset/multimodal_only_samples/multimodal_test.tsv",
-               new_annotations_file="./results/multimodal_only_samples/multimodal_test.tsv")
-    clean_data(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",
-               new_annotations_file="./results/multimodal_only_samples/multimodal_validate.tsv")
-    eda(annotations_file="./results/multimodal_only_samples/multimodal_train.tsv")
+    eda(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv")

@@ -21,9 +21,9 @@ from sklearn.ensemble import RandomForestClassifier
 import os
 import argparse
 
-from models import *
+from models import random_forest
 
-#from fakedditDataLoader import *
+from fakeddit_data_loader import *
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load('ViT-B/32', device) 
@@ -49,21 +49,9 @@ def get_features(dataset):
             all_labels.append(labels)
 
     return torch.cat(all_features).cpu().numpy(), torch.cat(all_labels).cpu().numpy()
-print('==> Getting features ')
-train_features, train_labels = get_features(train)
-test_features, test_labels = get_features(test)
-scores = {}
-
-print('==> Calculating Regression')
-
-for C in (10**k for k in range(-6, 6)):
-    classifier = LogisticRegression(random_state=0, C=C, max_iter=1000, verbose=1)
-    classifier.fit(train_features, train_labels)
-    scores[C] = {'train accuracy': classifier.score(train_features, train_labels), 
-                 'test accuracy': classifier.score(test_features, test_labels)}
-
-fig, axs = plt.subplots(figsize=(12, 4))    
-pd.DataFrame.from_dict(scores, 'index').plot(ax=axs,logx=True, xlabel='C', ylabel='accuracy');
-plt.savefig(fname='results/plots/trainingAccuracy.png',format='png')
 
 
+if __name__ == "__main__":
+    train_features, train_labels = get_features(train)
+    test_features, test_labels = get_features(test)
+    random_forest.train_and_test_random_forest(train_features,train_labels,test_features,test_features)

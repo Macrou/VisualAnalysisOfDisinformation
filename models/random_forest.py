@@ -1,8 +1,12 @@
+""" Random forest model trained and tested. And plotted.  
 
+Returns:
+    _type_: _description_
+"""
 import matplotlib.pyplot as plt
-from sklearn.metrics import RocCurveDisplay
+from sklearn.metrics import RocCurveDisplay, ConfusionMatrixDisplay
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
 
 
@@ -25,12 +29,21 @@ def train(model,train_features,train_labels):
         'min_samples_split': [8, 10, 12],
         'n_estimators': [100, 200, 300, 1000]
     }
-    rf_random = RandomizedSearchCV(estimator = model, param_distributions = random_grid,
+    rf_grid = GridSearchCV(estimator = model, param_distributions = random_grid,
                                    n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
-    rf_random.fit(train_features, train_labels)
-    return rf_random.best_estimator_
+    rf_grid.fit(train_features, train_labels)
+    return rf_grid.best_estimator_
 
 def test(model,train_features ,train_labels,test_features, test_labels):
+    """Tests a model with the given test models.
+
+    Args:
+        model (sklearn.ensemble.RandomForestClassifier): _description_
+        train_features (numpy.ndarray): _description_
+        train_labels (numpy.ndarray): _description_
+        test_features (numpy.ndarray): _description_
+        test_labels (numpy.ndarray): _description_
+    """
     model.fit(train_features, train_labels)
     # predict the mode
     test_pred = model.predict(test_features)
@@ -39,9 +52,30 @@ def test(model,train_features ,train_labels,test_features, test_labels):
     ax = plt.gca()
     rfc_disp = RocCurveDisplay.from_estimator(model, test_features, test_labels, ax=ax, alpha=0.8)
     rfc_disp.plot(ax=ax, alpha=0.8)
-    plt.show()
-
+    plt.savefig(fname='results/plots/RocCurveRandomForest.png',format='png')
+    plt.clf()
+    plt.figure(figsize=(8, 6))
+    ConfusionMatrixDisplay.from_estimator(model,test_features,test_labels,normalize='true')
+    plt.title('Normalized Confusion Matrix')
+    plt.savefig(fname='results/plots/ConfusionMatrix.png',format='png')
+    plt.clf()
+    importance = model.feature_importances_
+    # summarize feature importance
+    for i,v in enumerate(importance):
+        print('Feature: %0d, Score: %.5f' % (i,v))
+    # plot feature importance
+    plt.bar([x for x in range(len(importance))], importance)
+    plt.savefig(fname='results/plots/FeatureImportance.png',format='png')
 
 def train_and_test_random_forest(train_features,train_labels,test_features,test_labels):
+    """Trains and tests a random forest algorithm
+
+    Args:
+        train_features (_type_): _description_
+        train_labels (_type_): _description_
+        test_features (_type_): _description_
+        test_labels (_type_): _description_
+    """
     model = train(RandomForestClassifier(),train_features,train_labels)
+    print(model)
     test(model,train_features,train_labels,test_features,test_labels)

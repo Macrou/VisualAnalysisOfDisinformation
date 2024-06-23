@@ -21,7 +21,7 @@ def train(model,train_features,train_labels):
     Returns:
         sklearn.ensemble.RandomForestClassifier: Classifier with parameters tuned.  
     """
-    random_grid = {
+    param_grid = {
         'bootstrap': [True],
         'max_depth': [80, 90, 100, 110],
         'max_features': [2, 3],
@@ -29,10 +29,10 @@ def train(model,train_features,train_labels):
         'min_samples_split': [8, 10, 12],
         'n_estimators': [100, 200, 300, 1000]
     }
-    rf_grid = GridSearchCV(estimator = model, param_distributions = random_grid,
-                                   n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
-    rf_grid.fit(train_features, train_labels)
-    return rf_grid.best_estimator_
+    grid_search = GridSearchCV(estimator = model, param_grid = param_grid, 
+                          cv = 3, n_jobs = -1, verbose = 2)
+    grid_search.fit(train_features, train_labels)
+    return grid_search.best_estimator_
 
 def test(model,train_features ,train_labels,test_features, test_labels):
     """Tests a model with the given test models.

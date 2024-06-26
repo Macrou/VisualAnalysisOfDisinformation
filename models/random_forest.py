@@ -30,7 +30,7 @@ def train(model,train_features,train_labels):
         'n_estimators': [100, 200, 300, 1000]
     }
     grid_search = GridSearchCV(estimator = model, param_grid = param_grid, 
-                          cv = 3, n_jobs = -1, verbose = 2)
+                          cv = 3, n_jobs = 4, verbose = 2)
     grid_search.fit(train_features, train_labels)
     return grid_search.best_estimator_
 

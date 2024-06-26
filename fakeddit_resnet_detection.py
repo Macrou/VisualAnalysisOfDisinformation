@@ -13,7 +13,7 @@ import argparse
 from models import *
 from utils import progress_bar, get_mean_and_std
 from fakeddit_data_loader import *
-from torchvision.models import resnet34,ResNet34_Weights
+from torchvision.models import resnet34,ResNet34_Weights,resnet50,ResNet50_Weights 
 
 parser = argparse.ArgumentParser(description='PyTorch Disinformation Training')
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
@@ -63,7 +63,7 @@ testaccuracy = np.array([])
 
 # Model
 print('==> Building model..')
-net = resnet34()
+net = resnet50()
 net = net.to(device)
 if device == 'cuda':
     net = torch.nn.DataParallel(net)
@@ -78,8 +78,7 @@ if args.resume:
     start_epoch = checkpoint['epoch']
 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=args.lr,
-                      momentum=0.9, weight_decay=5e-4)
+optimizer = optim.Adam(net.parameters(), lr=args.lr, weight_decay=5e-8)
 
 def train(epoch):
     print('\nEpoch: %d' % epoch)

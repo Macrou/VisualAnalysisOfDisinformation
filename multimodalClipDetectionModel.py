@@ -13,7 +13,7 @@ from numpy.linalg import norm
 
 
 import clip
-from multimodal_fakeddit_data_loader import Multimodal_Fakeddit
+from dataloaders.multimodal_fakeddit_data_loader import Multimodal_Fakeddit
 
 import numpy as np
 import pandas as pd
@@ -47,7 +47,6 @@ def get_features(dataset):
         for images,text, labels in tqdm(DataLoader(dataset, batch_size=100)):
             image_features = model.encode_image(images.to(device))
             text_features = model.encode_text(text)
-            features =
             all_features.append(features)
             all_labels.append(labels)
 

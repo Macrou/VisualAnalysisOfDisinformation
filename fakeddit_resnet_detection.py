@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import argparse
 from models import *
 from utils import progress_bar, get_mean_and_std
-from fakeddit_data_loader import *
+from dataloaders.fakeddit_data_loader import *
 from torchvision.models import resnet34,ResNet34_Weights
 
 parser = argparse.ArgumentParser(description='PyTorch Disinformation Training')

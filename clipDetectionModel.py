@@ -10,7 +10,7 @@ from torchvision import datasets
 import torchvision.transforms as transforms
 
 import clip
-from fakeddit_data_loader import Fakeddit
+from dataloaders.fakeddit_data_loader import Fakeddit
 
 import numpy as np
 import pandas as pd
@@ -23,7 +23,7 @@ import argparse
 
 from models import random_forest
 
-from fakeddit_data_loader import *
+from dataloaders.fakeddit_data_loader import *
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load('ViT-B/32', device) 

@@ -40,11 +40,12 @@ classes = ('false','real')
 def get_features(dataset):
     all_features = []
     all_labels = []
-
+    model.eval()
+    
     with torch.no_grad():
         for images, labels in tqdm(DataLoader(dataset, batch_size=100)):
-            features = model.encode_image(images.to(device))
-
+            images = images.to(device)
+            features = model.encode_image(images)
             all_features.append(features)
             all_labels.append(labels)
 

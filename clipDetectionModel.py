@@ -47,8 +47,7 @@ def get_features(dataset):
             images = images.to(device)
             features = model.encode_image(images)
             all_features.append(features)
-            all_labels.append(labels)
-
+            all_labels.append(labels)      
     return torch.cat(all_features).cpu().numpy(), torch.cat(all_labels).cpu().numpy()
 
 

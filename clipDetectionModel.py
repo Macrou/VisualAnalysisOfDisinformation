@@ -24,19 +24,19 @@ import argparse
 from models import random_forest
 
 from dataloaders.fakeddit_data_loader import *
+parser = argparse.ArgumentParser(description='PyTorch Disinformation Training')
+parser.add_argument('--data','-d', default='Fakeddit', type= str, help='data set')
+args = parser.parse_args()
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print('==> Building model..')
 model, preprocess = clip.load('ViT-B/32', device) 
-model = model.to(device)
-if device == 'cuda':
-    model = torch.nn.DataParallel(model)
-    cudnn.benchmark = True
-#train = datasets.ImageFolder(root='dataset/cifake/train',transform=preprocess)
-#test = datasets.ImageFolder(root='dataset/cifake/test',transform=preprocess)
+#train =  Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=preprocess)
+#test = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=preprocess)
+train = datasets.ImageFolder(root='dataset/train',transform=preprocess)
+test = datasets.ImageFolder(root='dataset/test',transform=preprocess)
 
-train =  Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=preprocess)
-test = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=preprocess)
+
 
 classes = ('false','real')
 
@@ -49,10 +49,7 @@ def get_features(dataset):
     with torch.no_grad():
         for images, labels in tqdm(DataLoader(dataset, batch_size=100)):
             images = images.to(device)
-            if isinstance(model, torch.nn.DataParallel):
-                features = model.module.encode_image(images)
-            else:
-                features = model.encode_image(images)
+            features = model.encode_image(images)
             all_features.append(features)
             all_labels.append(labels)      
     return torch.cat(all_features).cpu().numpy(), torch.cat(all_labels).cpu().numpy()

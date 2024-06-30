@@ -11,7 +11,7 @@ def train(train_features,train_labels):
     grid = {
         'solvers':['newton-cg', 'lbfgs', 'liblinear'],
         'penalty': ['l2'],
-        'c_values': [100, 10, 1.0, 0.1, 0.01],
+        'C': [100, 10, 1.0, 0.1, 0.01],
         'max_iter' : [400]
     }
     knn= LogisticRegression()

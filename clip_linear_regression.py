@@ -27,7 +27,10 @@ from dataloaders.fakeddit_data_loader import *
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load('ViT-B/32', device) 
-
+model = model.to(device)
+if device == 'cuda':
+    model = torch.nn.DataParallel(model)
+    cudnn.benchmark = True
 #train = datasets.ImageFolder(root='dataset/cifake/train',transform=preprocess)
 #test = datasets.ImageFolder(root='dataset/cifake/test',transform=preprocess)
 
@@ -45,7 +48,11 @@ def get_features(dataset):
     with torch.no_grad():
         for images, labels in tqdm(DataLoader(dataset, batch_size=100)):
             images = images.to(device)
-            features = model.encode_image(images)
+            if isinstance(model, torch.nn.DataParallel):
+                features = model.module.encode_image(images)
+            else:
+                features = model.encode_image(images)
+
             all_features.append(features)
             all_labels.append(labels)      
     return torch.cat(all_features).cpu().numpy(), torch.cat(all_labels).cpu().numpy()
@@ -54,4 +61,4 @@ def get_features(dataset):
 if __name__ == "__main__":
     train_features, train_labels = get_features(train)
     test_features, test_labels = get_features(test)
-    linear_regression.train_and_test_linear_regression(train_features,train_labels,test_features,test_features)
+    linear_regression.train_and_test_linear_regression(train_features,train_labels,test_features,test_labels)

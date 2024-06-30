@@ -49,7 +49,10 @@ def get_features(dataset):
     with torch.no_grad():
         for images, labels in tqdm(DataLoader(dataset, batch_size=100)):
             images = images.to(device)
-            features = model.encode_image(images)
+            if isinstance(model, torch.nn.DataParallel):
+                features = model.module.encode_image(images)
+            else:
+                features = model.encode_image(images)
             all_features.append(features)
             all_labels.append(labels)      
     return torch.cat(all_features).cpu().numpy(), torch.cat(all_labels).cpu().numpy()
@@ -60,4 +63,4 @@ if __name__ == "__main__":
     train_features, train_labels = get_features(train)
     test_features, test_labels = get_features(test)
     print('==> Training random forest model..')
-    random_forest.train_and_test_random_forest(train_features,train_labels,test_features,test_features)
+    random_forest.train_and_test_random_forest(train_features,train_labels,test_features,test_labels)

@@ -26,8 +26,12 @@ from models import random_forest
 from dataloaders.fakeddit_data_loader import *
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
+print('==> Building model..')
 model, preprocess = clip.load('ViT-B/32', device) 
-model.to(device)
+model = model.to(device)
+if device == 'cuda':
+    model = torch.nn.DataParallel(model)
+    cudnn.benchmark = True
 #train = datasets.ImageFolder(root='dataset/cifake/train',transform=preprocess)
 #test = datasets.ImageFolder(root='dataset/cifake/test',transform=preprocess)
 
@@ -52,6 +56,8 @@ def get_features(dataset):
 
 
 if __name__ == "__main__":
+    print('==> Getting features..')
     train_features, train_labels = get_features(train)
     test_features, test_labels = get_features(test)
+    print('==> Training random forest model..')
     random_forest.train_and_test_random_forest(train_features,train_labels,test_features,test_features)

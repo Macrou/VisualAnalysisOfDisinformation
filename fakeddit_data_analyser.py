@@ -6,6 +6,7 @@ and analyses the training set for corelation between title and label.
 import os
 from collections import Counter
 
+import numpy as np
 import pandas as pd
 from PIL import Image,UnidentifiedImageError
 import matplotlib.pyplot as plt
@@ -114,6 +115,17 @@ def box_plot_corelation_between_label_and_title_length(df):
     plt.ylabel('Title Length')
     plt.savefig(fname='results/plots/boxPlot.png',format='png')
 
+def getImageSize(file):
+    im = Image.open(file)
+    arr = np.array(im)
+    h,w,d = arr.shape
+    return h,w
+
+
+def plotImageSize(annotations : pd.DataFrame):
+   ids = annotations.index.values
+   filePaths
+    
 
 def eda(annotations_file):
     """performs exploratory data analysis on the dataset

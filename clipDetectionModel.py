@@ -27,7 +27,7 @@ from dataloaders.fakeddit_data_loader import *
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load('ViT-B/32', device) 
-
+model.to(device)
 #train = datasets.ImageFolder(root='dataset/cifake/train',transform=preprocess)
 #test = datasets.ImageFolder(root='dataset/cifake/test',transform=preprocess)
 

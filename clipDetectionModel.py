@@ -31,10 +31,10 @@ args = parser.parse_args()
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print('==> Building model..')
 model, preprocess = clip.load('ViT-B/32', device) 
-#train =  Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=preprocess)
-#test = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=preprocess)
-train = datasets.ImageFolder(root='dataset/train',transform=preprocess)
-test = datasets.ImageFolder(root='dataset/test',transform=preprocess)
+train =  Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=preprocess)
+test = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=preprocess)
+#train = datasets.ImageFolder(root='dataset/train',transform=preprocess)
+#test = datasets.ImageFolder(root='dataset/test',transform=preprocess)
 
 
 

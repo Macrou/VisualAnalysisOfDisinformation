@@ -47,6 +47,7 @@ def get_features(dataset):
         for images,text, labels in tqdm(DataLoader(dataset, batch_size=100)):
             image_features = model.encode_image(images.to(device))
             text_features = model.encode_text(text)
+            features = torch.cat((image_features, text_features), dim=1)  
             all_features.append(features)
             all_labels.append(labels)
 

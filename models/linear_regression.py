@@ -13,7 +13,7 @@ def train(train_features,train_labels):
     c_values = [100, 10, 1.0, 0.1, 0.01]
     # define grid search
     grid = dict(solver=solvers,penalty=penalty,C=c_values)
-    knn= LogisticRegression
+    knn= LogisticRegression()
     model_cv=GridSearchCV(knn, param_grid=grid, cv=3, verbose=1)
     model_cv.fit(train_features, train_labels)
     return model_cv.best_estimator_

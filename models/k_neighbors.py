@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import RocCurveDisplay, ConfusionMatrixDisplay
-from sklearn.ensemble import KNeighborsClassifier
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
 

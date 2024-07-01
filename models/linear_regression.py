@@ -9,13 +9,13 @@ from sklearn.metrics import classification_report
 
 def train(train_features,train_labels):
     grid = {
-        'solvers':['newton-cg', 'lbfgs', 'liblinear'],
+        'solver':['newton-cg', 'lbfgs', 'liblinear'],
         'penalty': ['l2'],
-        'c_values': [100, 10, 1.0, 0.1, 0.01],
+        'C': [100, 10, 1.0, 0.1, 0.01],
         'max_iter' : [400]
     }
     knn= LogisticRegression()
-    model_cv=GridSearchCV(knn, param_grid=grid, cv=3, verbose=1)
+    model_cv=GridSearchCV(knn, param_grid=grid, cv=5, verbose=1)
     model_cv.fit(train_features, train_labels)
     return model_cv.best_estimator_
     

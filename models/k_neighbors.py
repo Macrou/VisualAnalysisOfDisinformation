@@ -2,14 +2,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import RocCurveDisplay, ConfusionMatrixDisplay
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.metrics import classification_report
 
 
 def train(train_features,train_labels):
     parameter={'n_neighbors': np.arange(2, 30, 1)}
     knn=KNeighborsClassifier()
-    knn_cv=GridSearchCV(knn, param_grid=parameter, cv=3, verbose=1)
+    knn_cv=RandomizedSearchCV(estimator = knn, param_distributions = parameter, 
+                                     n_iter = 50, cv = 5, verbose=2, random_state=42, n_jobs = 8)
     knn_cv.fit(train_features, train_labels)
     return knn_cv.best_estimator_
     

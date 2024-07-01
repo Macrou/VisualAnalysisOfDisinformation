@@ -3,10 +3,12 @@
 Returns:
     _type_: _description_
 """
+import time
 import matplotlib.pyplot as plt
+import numpy as np
 from sklearn.metrics import RocCurveDisplay, ConfusionMatrixDisplay
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV,RandomizedSearchCV
 from sklearn.metrics import classification_report
 
 
@@ -21,16 +23,19 @@ def train(model,train_features,train_labels):
     Returns:
         sklearn.ensemble.RandomForestClassifier: Classifier with parameters tuned.  
     """
+    n_estimators = [int(x) for x in np.linspace(start = 200, stop = 2000, num = 10)]
+    max_depth = [int(x) for x in np.linspace(10, 110, num = 11)]
     param_grid = {
         'bootstrap': [True],
-        'max_depth': [100, 300, 500],
+        'max_depth': max_depth,
         'max_features': ['sqrt', 'log2'],
         'min_samples_leaf': [3, 4, 5],
         'min_samples_split': [1, 2, 4],
-        'n_estimators': [100, 200, 300, 1000]
+        'n_estimators': n_estimators
     }
-    grid_search = GridSearchCV(estimator = model, param_grid = param_grid, 
-                          cv = 5, n_jobs = 16, verbose = 2)
+    grid_search = RandomizedSearchCV(estimator = model, param_distributions = param_grid, 
+                                     n_iter = 50, cv = 5, verbose=2, random_state=42, n_jobs = 8)
+
     grid_search.fit(train_features, train_labels)
     return grid_search.best_estimator_
 
@@ -76,6 +81,10 @@ def train_and_test_random_forest(train_features,train_labels,test_features,test_
         test_features (_type_): _description_
         test_labels (_type_): _description_
     """
+    start_time = time.time()
+    print(f'starts time is {start_time}')
     model = train(RandomForestClassifier(),train_features,train_labels)
     print(model)
+    total_time = time.time() - start_time
+    print(f'end time is {total_time}')
     test(model,train_features,train_labels,test_features,test_labels)

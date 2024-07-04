@@ -63,7 +63,7 @@ testaccuracy = np.array([])
 
 # Model
 print('==> Building model..')
-net = resnet50(weights=ResNet50_Weights.DEFAULT)
+net = resnet34(weights=ResNet34_Weights.DEFAULT)
 net = net.to(device)
 if device == 'cuda':
     net = torch.nn.DataParallel(net)

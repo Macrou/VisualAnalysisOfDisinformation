@@ -24,6 +24,7 @@ class RandomForestModel(SimpleModel):
         Returns:
             sklearn.ensemble.RandomForestClassifier: Classifier with parameters tuned.  
         """
+        print('==> Training Random forest')
         n_estimators = [int(x) for x in np.linspace(start = 100, stop = 1000, num = 10)]
         max_depth = [int(x) for x in np.linspace(10, 110, num = 11)]
         param_grid = {
@@ -74,7 +75,7 @@ class RandomForestModel(SimpleModel):
         plt.bar([x for x in range(len(importance))], importance)
         plt.savefig(fname='results/plots/FeatureImportance.png',format='png')
 
-    def train_and_test_random_forest(self):
+    def train_and_test(self):
         """Trains and tests a random forest algorithm
 
         Args:

@@ -10,6 +10,7 @@ from algorithms.simple_model import SimpleModel
 class LinearRegressionModel(SimpleModel):
     
     def train(self):
+        print('==> Training logistic regression')
         grid = {
             'solver':['newton-cg', 'lbfgs', 'liblinear'],
             'penalty': ['l2'],

@@ -121,10 +121,6 @@ def getImageSize(file):
     h,w,d = arr.shape
     return h,w
 
-
-def plotImageSize(annotations : pd.DataFrame):
-   ids = annotations.index.values
-   filePaths
     
 
 def eda(annotations_file):

@@ -8,6 +8,7 @@ from algorithms.simple_model import SimpleModel
 
 class KNeighborsModel(SimpleModel):
     def train(self):
+        print('==> Training KNN')
         parameter={'n_neighbors': np.arange(2, 30, 1)}
         knn=KNeighborsClassifier()
         knn_cv=RandomizedSearchCV(estimator = knn, param_distributions = parameter, 

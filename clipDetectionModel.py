@@ -21,20 +21,24 @@ from sklearn.ensemble import RandomForestClassifier
 import os
 import argparse
 
-from algorithms import random_forest
+from algorithms.model_handler import ModelHandler
+from algorithms.model_factoy import ModelFactory
 
 from dataloaders.fakeddit_data_loader import *
 parser = argparse.ArgumentParser(description='PyTorch Disinformation Training')
-parser.add_argument('--data','-d', default='Fakeddit', type= str, help='data set')
+parser.add_argument('--data','-d', choices=['Fakeddit', 'CIFAKE'],default='Fakeddit', type= str, help='data set')
+parser.add_argument('--classifier','-c',choices=['Logistic', 'Random Forest','KNN'],default='Logistic',type= str, help='classifier used')
 args = parser.parse_args()
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print('==> Building model..')
 model, preprocess = clip.load('ViT-B/32', device) 
-train =  Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=preprocess)
-test = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=preprocess)
-# train = datasets.ImageFolder(root='dataset/train',transform=preprocess)
-# test = datasets.ImageFolder(root='dataset/test',transform=preprocess)
+if args.data == 'Fakeddit':  
+    train = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=preprocess)
+    test =  Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=preprocess)
+elif args.data == 'CIFAKE':
+    train = datasets.ImageFolder(root='dataset/train',transform=preprocess)
+    test = datasets.ImageFolder(root='dataset/test',transform=preprocess)
 
 
 
@@ -59,5 +63,5 @@ if __name__ == "__main__":
     print('==> Getting features..')
     train_features, train_labels = get_features(train)
     test_features, test_labels = get_features(test)
-    print('==> Training random forest model..')
-    random_forest.train_and_test_random_forest(train_features,train_labels,test_features,test_labels)
+    model_handler = ModelFactory(train_features,train_labels,test_features,test_labels).create()
+    model_handler.train_model(args.classifier)

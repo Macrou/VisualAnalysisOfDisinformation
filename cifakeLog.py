@@ -21,7 +21,7 @@ from sklearn.ensemble import RandomForestClassifier
 import os
 import argparse
 
-from models import linear_regression
+from algorithms import linear_regression
 
 from dataloaders.fakeddit_data_loader import *
 

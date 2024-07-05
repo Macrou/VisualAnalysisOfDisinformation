@@ -17,21 +17,20 @@ import pandas as pd
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier
-import os
-import argparse
 
-from models import linear_regression
+
+from algorithms.linear_regression import LinearRegressionModel
+
 
 from dataloaders.fakeddit_data_loader import *
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load('ViT-B/32', device) 
-#train = datasets.ImageFolder(root='dataset/cifake/train',transform=preprocess)
-#test = datasets.ImageFolder(root='dataset/cifake/test',transform=preprocess)
+train = datasets.ImageFolder(root='dataset/train',transform=preprocess)
+test = datasets.ImageFolder(root='dataset/test',transform=preprocess)
 
-train =  Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=preprocess)
-test = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=preprocess)
+#train =  Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=preprocess)
+#test = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=preprocess)
 
 classes = ('false','real')
 
@@ -53,4 +52,7 @@ def get_features(dataset):
 if __name__ == "__main__":
     train_features, train_labels = get_features(train)
     test_features, test_labels = get_features(test)
-    linear_regression.train_and_test_linear_regression(train_features,train_labels,test_features,test_labels)
+    logi = LogisticRegression(C=100, max_iter=400, solver='newton-cg')
+    model = LinearRegressionModel(train_features=train_features,train_labels=train_labels,test_features=test_features,test_labels=test_labels,model=logi)
+    model.test()
+    model.evaluate_results()

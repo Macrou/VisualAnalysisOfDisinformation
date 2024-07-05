@@ -21,7 +21,7 @@ from sklearn.ensemble import RandomForestClassifier
 import os
 import argparse
 
-from models import random_forest
+from algorithms import random_forest
 
 from dataloaders.fakeddit_data_loader import *
 parser = argparse.ArgumentParser(description='PyTorch Disinformation Training')

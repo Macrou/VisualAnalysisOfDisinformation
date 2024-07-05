@@ -21,7 +21,7 @@ from sklearn.ensemble import RandomForestClassifier
 import os
 import argparse
 
-from models import k_neighbors
+from algorithms import k_neighbors
 
 from dataloaders.fakeddit_data_loader import *
 

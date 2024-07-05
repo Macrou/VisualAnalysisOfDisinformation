@@ -163,3 +163,6 @@ checkpoint/
 
 .dataset
 dataset/
+
+.results
+results/

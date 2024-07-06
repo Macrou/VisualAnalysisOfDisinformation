@@ -55,7 +55,27 @@ class RandomForestModel(SimpleModel):
         self.model.fit(self.train_features, self.train_labels)
         # predict the mode
         self.predictions = self.model.predict(self.test_features)
-        # performance evaluatio metrics
+        
+
+    def train_and_test(self):
+        """Trains and tests a random forest algorithm
+
+        Args:
+            train_features (_type_): _description_
+            train_labels (_type_): _description_
+            test_features (_type_): _description_
+            test_labels (_type_): _description_
+        """
+        start_time = time.time()
+        print(f'starts time is {start_time}')
+        model = self.train()
+        print(model)
+        total_time = time.time() - start_time
+        print(f'end time is {total_time}')
+        self.test(model)
+
+    def evaluate_results(self):
+        print(self.model)
         print(classification_report(self.predictions, self.test_labels))
         ax = plt.gca()
         rfc_disp = RocCurveDisplay.from_estimator(self.model, self.test_features, self.test_labels, ax=ax, alpha=0.8)
@@ -74,20 +94,3 @@ class RandomForestModel(SimpleModel):
         # plot feature importance
         plt.bar([x for x in range(len(importance))], importance)
         plt.savefig(fname='results/plots/FeatureImportance.png',format='png')
-
-    def train_and_test(self):
-        """Trains and tests a random forest algorithm
-
-        Args:
-            train_features (_type_): _description_
-            train_labels (_type_): _description_
-            test_features (_type_): _description_
-            test_labels (_type_): _description_
-        """
-        start_time = time.time()
-        print(f'starts time is {start_time}')
-        model = self.train()
-        print(model)
-        total_time = time.time() - start_time
-        print(f'end time is {total_time}')
-        self.test(model)

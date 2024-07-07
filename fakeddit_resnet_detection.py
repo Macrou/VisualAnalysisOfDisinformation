@@ -22,9 +22,10 @@ parser.add_argument('--ep',default=15,type=int,help='maximum epoch')
 parser.add_argument('--resume', '-r', action='store_true',
                     help='resume from checkpoint')
 parser.add_argument('--data','-d', choices=['Fakeddit', 'CIFAKE'],default='Fakeddit', type= str, help='data set')
-args = parser.parse_args()
 parser.add_argument('--test', '-t', action='store_true',
                     help='test the model without training')
+args = parser.parse_args()
+
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 best_acc = 0  # best test accuracy

@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import cupy as cp
 from sklearn.metrics import RocCurveDisplay, ConfusionMatrixDisplay
+import torch
 from xgboost import XGBRFClassifier
 from sklearn.model_selection import GridSearchCV,RandomizedSearchCV
 from sklearn.metrics import classification_report
@@ -29,6 +30,8 @@ class XgbModel(SimpleModel):
             sklearn.ensemble.RandomForestClassifier: Classifier with parameters tuned.  
         """
         print('==> Training Random forest')
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        print(device)
         param_dist = {
             'n_estimators':[int(x) for x in np.linspace(start = 100, stop = 1000, num = 10)],
             'max_depth': [int(x) for x in np.linspace(10, 110, num = 11)],

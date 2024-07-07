@@ -36,11 +36,7 @@ class XgbModel(SimpleModel):
             'colsample_bynode': np.linspace(0.5, 1.0, 5),
             'min_child_weight': np.arange(1, 6, 1)
         }
-        if self.device == 'cuda':
-            model = XGBRFClassifier(tree_method='gpu_hist', random_state=42,predictor='gpu_predictor')
-        else:
-            print("yes")
-            model = XGBRFClassifier(random_state=42)       
+        model = XGBRFClassifier(random_state=42,device=self.device)       
         grid_search = RandomizedSearchCV(estimator = model, param_distributions = param_dist, 
                                         n_iter = 100, cv = 5, verbose=2, random_state=42, n_jobs = -1)
 

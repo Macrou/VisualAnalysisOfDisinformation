@@ -23,6 +23,8 @@ parser.add_argument('--resume', '-r', action='store_true',
                     help='resume from checkpoint')
 parser.add_argument('--data','-d', choices=['Fakeddit', 'CIFAKE'],default='Fakeddit', type= str, help='data set')
 args = parser.parse_args()
+parser.add_argument('--test', '-t', action='store_true',
+                    help='test the model without training')
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 best_acc = 0  # best test accuracy
@@ -45,20 +47,20 @@ transform_test = transforms.Compose([
 ])
 
 if args.data == 'Fakeddit':  
-    train = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=transform_train)
-    test =  Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=transform_test)
+    trainset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=transform_train)
+    testset =  Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=transform_test)
 elif args.data == 'CIFAKE':
-    train = datasets.ImageFolder(root='dataset/train',transform=transform_train)
-    test = datasets.ImageFolder(root='dataset/test',transform=transform_test)
+    trainset = datasets.ImageFolder(root='dataset/train',transform=transform_train)
+    testset = datasets.ImageFolder(root='dataset/test',transform=transform_test)
 
 trainloader = torch.utils.data.DataLoader(
-    train,batch_size=128, shuffle=True, num_workers=4
+    trainset,batch_size=128, shuffle=True, num_workers=4
 )
 
-testset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_validate.tsv",
-                   transform=transform_test)
+# testset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_validate.tsv",
+#                    transform=transform_test)
 testloader = torch.utils.data.DataLoader(
-    test,batch_size=100, shuffle=False, num_workers=4
+    testset,batch_size=100, shuffle=False, num_workers=4
 )
 
 classes = ('false','real')
@@ -183,10 +185,11 @@ def print_mean_and_div():
     print(f"the mean and deviation for training are {trainmean} {trainstd} and for test are {testmean} and {trainstd}")
 
 if __name__ == "__main__":
-    for epoch in range(start_epoch, start_epoch + args.ep):
-        train(epoch)
-        test(epoch)
-       #scheduler.step()
-    plot_figures()
-    #print_mean_and_div()
+    if args.train :
+        test(start_epoch)
+    else:
+        for epoch in range(start_epoch, start_epoch + args.ep):
+            train(epoch)
+            test(epoch)
+            plot_figures()
 

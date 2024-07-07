@@ -25,8 +25,8 @@ class RandomForestModel(SimpleModel):
             sklearn.ensemble.RandomForestClassifier: Classifier with parameters tuned.  
         """
         print('==> Training Random forest')
-        n_estimators = [int(x) for x in np.linspace(start = 100, stop = 500, num = 10)]
-        max_depth = [int(x) for x in np.linspace(10, 50, num = 11)]
+        n_estimators = [int(x) for x in np.linspace(start = 100, stop = 1000, num = 10)]
+        max_depth = [int(x) for x in np.linspace(10, 110, num = 11)]
         param_grid = {
             'bootstrap': [True],
             'max_depth': max_depth,

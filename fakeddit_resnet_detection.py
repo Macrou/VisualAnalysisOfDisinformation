@@ -52,13 +52,13 @@ elif args.data == 'CIFAKE':
     test = datasets.ImageFolder(root='dataset/test',transform=transform_test)
 
 trainloader = torch.utils.data.DataLoader(
-    trainset,batch_size=128, shuffle=True, num_workers=4
+    train,batch_size=128, shuffle=True, num_workers=4
 )
 
 testset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_validate.tsv",
                    transform=transform_test)
 testloader = torch.utils.data.DataLoader(
-    testset,batch_size=100, shuffle=False, num_workers=4
+    test,batch_size=100, shuffle=False, num_workers=4
 )
 
 classes = ('false','real')

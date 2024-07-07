@@ -52,7 +52,7 @@ if __name__ == "__main__":
     print('==> Getting features..')
     train_features, train_labels = get_features(train)
     test_features, test_labels = get_features(test)
-    model_handler = ModelFactory(train_features,train_labels,test_features,test_labels,device).create()
+    model_handler = ModelFactory(train_features,train_labels,test_features,test_labels,device=device).create()
     model_handler.train_model(args.classifier)
     model_handler.test_model(args.classifier)
     model_handler.evaluate_results(args.classifier)

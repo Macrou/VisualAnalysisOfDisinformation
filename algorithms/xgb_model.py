@@ -43,7 +43,7 @@ class XgbModel(SimpleModel):
         grid_search = RandomizedSearchCV(estimator = model, param_distributions = param_dist, 
                                         n_iter = 100, cv = 5, verbose=2, random_state=42, n_jobs = 1)
 
-        grid_search.fit(train_features, train_labels)
+        grid_search.fit(self.train_features, self.train_labels)
         self.model = grid_search.best_estimator_
 
     def test(self):

@@ -6,6 +6,7 @@ import torch.optim as optim
 import torch.backends.cudnn as cudnn
 import torch.utils
 import torchvision.transforms as transforms
+from torchvision import datasets 
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -20,6 +21,7 @@ parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
 parser.add_argument('--ep',default=15,type=int,help='maximum epoch')
 parser.add_argument('--resume', '-r', action='store_true',
                     help='resume from checkpoint')
+parser.add_argument('--data','-d', choices=['Fakeddit', 'CIFAKE'],default='Fakeddit', type= str, help='data set')
 args = parser.parse_args()
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -42,8 +44,13 @@ transform_test = transforms.Compose([
     transforms.Normalize((0.4707, 0.4399, 0.4118), (0.2375, 0.2286, 0.2279)),
 ])
 
-trainset = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",
-                    transform=transform_train)
+if args.data == 'Fakeddit':  
+    train = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=transform_train)
+    test =  Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=transform_test)
+elif args.data == 'CIFAKE':
+    train = datasets.ImageFolder(root='dataset/train',transform=transform_train)
+    test = datasets.ImageFolder(root='dataset/test',transform=transform_test)
+
 trainloader = torch.utils.data.DataLoader(
     trainset,batch_size=128, shuffle=True, num_workers=4
 )

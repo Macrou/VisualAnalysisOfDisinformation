@@ -8,7 +8,6 @@ from dataloaders.fakeddit_data_loader import Fakeddit
 
 
 from tqdm import tqdm
-import os
 import argparse
 
 from algorithms.model_factoy import ModelFactory

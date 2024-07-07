@@ -29,8 +29,8 @@ class XgbModel(SimpleModel):
         """
         print('==> Training Random forest')
         param_dist = {
-            'n_estimators':[int(x) for x in np.linspace(start = 100, stop = 1000, num = 10)],
-            'max_depth': [int(x) for x in np.linspace(10, 110, num = 11)],
+            'n_estimators':[int(x) for x in np.linspace(start = 100, stop = 500, num = 10)],
+            'max_depth': [int(x) for x in np.linspace(10, 50, num = 11)],
             'learning_rate': np.linspace(0.01, 0.2, 10),
             'subsample': np.linspace(0.6, 1.0, 5),
             'colsample_bynode': np.linspace(0.5, 1.0, 5),

@@ -37,13 +37,11 @@ class XgbModel(SimpleModel):
             'colsample_bynode': np.linspace(0.5, 1.0, 5),
             'min_child_weight': np.arange(1, 6, 1)
         }
-        self.train_features = cp.array(self.train_features)
-        self.train_labels = cp.array(self.train_labels)
         model = XGBRFClassifier(random_state=42,device=self.device)       
         grid_search = RandomizedSearchCV(estimator = model, param_distributions = param_dist, 
                                         n_iter = 100, cv = 5, verbose=2, random_state=42, n_jobs = 1)
 
-        grid_search.fit(self.train_features, self.train_labels)
+        grid_search.fit(cp.array(self.train_features), self.train_labels)
         self.model = grid_search.best_estimator_
 
     def test(self):

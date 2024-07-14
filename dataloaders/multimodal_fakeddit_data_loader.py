@@ -50,5 +50,5 @@ class Multimodal_Fakeddit(Fakeddit):
         return {
             'image':image, 
             'label':label,
-            
+            'tokens': title_tokens
         }

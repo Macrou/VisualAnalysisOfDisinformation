@@ -47,8 +47,4 @@ class Multimodal_Fakeddit(Fakeddit):
             image = self.transform(image)
         if self.target_transform:
             label = self.target_transform(label)
-        return {
-            'image':image, 
-            'label':label,
-            'tokens': title_tokens
-        }
+        return image,title_tokens,label

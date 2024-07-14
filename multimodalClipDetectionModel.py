@@ -25,7 +25,6 @@ import os
 import argparse
 from options_clip import args
 
-from models import *
 from dataloaders.multimodal_fakeddit_data_loader import Multimodal_Fakeddit
 
 device = "cuda" if torch.cuda.is_available() else "cpu"

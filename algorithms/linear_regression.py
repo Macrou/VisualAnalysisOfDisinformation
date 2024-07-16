@@ -6,6 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
 from algorithms.simple_model import SimpleModel
+import pickle
 
 class LinearRegressionModel(SimpleModel):
     
@@ -33,6 +34,8 @@ class LinearRegressionModel(SimpleModel):
             test_labels (numpy.ndarray): _description_
         """
         self.model.fit(self.train_features, self.train_labels)
+        filename = 'finalized_logistic_regression_model.sav'
+        pickle.dump(self.model, open(filename, 'wb'))
         self.predictions = self.model.predict(self.test_features)
 
     def train_and_test(self):

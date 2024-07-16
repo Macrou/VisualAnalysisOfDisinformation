@@ -11,6 +11,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV,RandomizedSearchCV
 from sklearn.metrics import classification_report
 from algorithms.simple_model import SimpleModel
+import pickle
 
 class RandomForestModel(SimpleModel):
     def train(self):
@@ -53,6 +54,9 @@ class RandomForestModel(SimpleModel):
             test_labels (numpy.ndarray): _description_
         """
         self.model.fit(self.train_features, self.train_labels)
+        filename = 'finalized_random_forest_model.sav'
+        pickle.dump(self.model, open(filename, 'wb'))
+        
         # predict the mode
         self.predictions = self.model.predict(self.test_features)
         

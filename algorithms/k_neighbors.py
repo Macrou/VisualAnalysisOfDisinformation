@@ -5,6 +5,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.metrics import classification_report
 from algorithms.simple_model import SimpleModel
+import pickle
 
 class KNeighborsModel(SimpleModel):
     def train(self):
@@ -37,3 +38,7 @@ class KNeighborsModel(SimpleModel):
         plt.savefig(fname='results/plots/ConfusionMatrix.png',format='png')
         plt.clf()
    
+    def save_correct_incorrect_predictions(self):
+        correct_indices = np.where(self.predictions == self.test_labels)[0]
+        incorrect_indices = np.where(self.predictions != self.test_labels)[0]
+ 

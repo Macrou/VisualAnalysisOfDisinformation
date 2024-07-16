@@ -8,7 +8,7 @@ from sklearn.linear_model import LogisticRegression
 import clip
 from xgboost import XGBRFClassifier
 from dataloaders.fakeddit_data_loader import Fakeddit
-
+import pickle
 
 from tqdm import tqdm
 import argparse
@@ -22,6 +22,13 @@ parser.add_argument('--classifier','-c',choices=['Logistic', 'Random Forest','KN
 parser.add_argument('--resume', '-r', action='store_true',
                     help='resume from checkpoint')
 args = parser.parse_args()
+
+filenames = {
+        'Logistic': './checkpoint/finalized_random_forest_model.sav',
+        'Random Forest': './checkpoint/finalized_logistic_regression_model.sav',
+        'KNN': './checkpoint/finalized_k_model.sav',
+        'XGBoost': './checkpoint/finalized_random_forest_model.sav'
+}
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print('==> Building model..')
@@ -57,13 +64,15 @@ if __name__ == "__main__":
     train_features, train_labels = get_features(train)
     test_features, test_labels = get_features(test)
     models = {
-        'Logistic': LogisticRegression(C=100, max_iter=400, solver='newton-cg'),
-        'Random Forest': RandomForestClassifier(max_depth=60, min_samples_leaf=3, min_samples_split=4,
-                       n_estimators=1400),
-        'KNN': KNeighborsClassifier(n_neighbors=7),
+        'Logistic': LogisticRegression(C=10, max_iter=400, solver='newton-cg',n_jobs=-1),
+        'Random Forest': RandomForestClassifier(),
+        'KNN': KNeighborsClassifier(n_neighbors=29,n_jobs=-1),
         'XGBoost': XGBRFClassifier()
     }
+    if args.resume:
+        models[args.classifier] = pickle(model,open(filenames[args.classifier],'rb'))
     model_handler = ModelFactory(train_features,train_labels,test_features,test_labels,models=models,device=device).create()
     #model_handler.train_model(args.classifier)
-    model_handler.test_all()
+    model_handler.test_model('Logistic')
+    model_handler.test_model('KNN')
     #model_handler.evaluate_results(args.classifier)

@@ -42,7 +42,7 @@ class Multimodal_Fakeddit(Fakeddit):
                                              dtype=np.uint8))  # Adjust dimensions as needed
         label = self.img_labels[idx]
         title = self.titles[idx]
-        title_tokens = self.tokenizer(title)
+        title_tokens = self.tokenizer([title])[0]
         if self.transform:
             image = self.transform(image)
         if self.target_transform:

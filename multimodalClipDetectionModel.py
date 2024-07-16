@@ -41,9 +41,9 @@ def get_features(dataset):
     all_labels = []
 
     with torch.no_grad():
-        for images,text, labels in tqdm(DataLoader(dataset, batch_size=100)):
+        for images,texts, labels in tqdm(DataLoader(dataset, batch_size=100)):
             image_features = model.encode_image(images.to(device))
-            text_features = model.encode_text(text.to(device))
+            text_features = model.encode_text(texts.to(device))
             features = torch.maximum(image_features,text_features)
             all_features.append(features)
             all_labels.append(labels)

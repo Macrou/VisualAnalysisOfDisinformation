@@ -19,6 +19,8 @@ class KNeighborsModel(SimpleModel):
         
     def test(self):
         self.model.fit(self.train_features, self.train_labels)
+        filename = './results/checkpoint/finalized_k_model.sav'
+        pickle.dump(self.model, open(filename, 'wb'))
         self.predictions = self.model.predict(self.test_features)
 
     def train_and_test(self):

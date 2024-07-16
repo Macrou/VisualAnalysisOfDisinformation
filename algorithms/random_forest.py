@@ -54,7 +54,7 @@ class RandomForestModel(SimpleModel):
             test_labels (numpy.ndarray): _description_
         """
         self.model.fit(self.train_features, self.train_labels)
-        filename = 'finalized_random_forest_model.sav'
+        filename = './results/checkpoint/finalized_random_forest_model.sav'
         pickle.dump(self.model, open(filename, 'wb'))
         
         # predict the mode

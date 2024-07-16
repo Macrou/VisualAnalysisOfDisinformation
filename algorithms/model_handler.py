@@ -17,3 +17,7 @@ class ModelHandler():
 
     def add_model(self,name,model):
         self.models[name] = model
+    
+    def test_all(self):
+        for model in self.models.values():
+            model.test()

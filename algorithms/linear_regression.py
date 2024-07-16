@@ -34,7 +34,7 @@ class LinearRegressionModel(SimpleModel):
             test_labels (numpy.ndarray): _description_
         """
         self.model.fit(self.train_features, self.train_labels)
-        filename = 'finalized_logistic_regression_model.sav'
+        filename = './results/checkpoint/finalized_logistic_regression_model.sav'
         pickle.dump(self.model, open(filename, 'wb'))
         self.predictions = self.model.predict(self.test_features)
 

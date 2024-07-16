@@ -1,9 +1,12 @@
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
 import torch
 import torch.utils
 from torch.utils.data import DataLoader
 from torchvision import datasets 
 from sklearn.linear_model import LogisticRegression
 import clip
+from xgboost import XGBRFClassifier
 from dataloaders.fakeddit_data_loader import Fakeddit
 
 
@@ -55,11 +58,12 @@ if __name__ == "__main__":
     test_features, test_labels = get_features(test)
     models = {
         'Logistic': LogisticRegression(C=100, max_iter=400, solver='newton-cg'),
-        'Random Forest':None,
-        'KNN': None,
-        'XGBoost': None
+        'Random Forest': RandomForestClassifier(max_depth=60, min_samples_leaf=3, min_samples_split=4,
+                       n_estimators=1400),
+        'KNN': KNeighborsClassifier(n_neighbors=7),
+        'XGBoost': XGBRFClassifier()
     }
     model_handler = ModelFactory(train_features,train_labels,test_features,test_labels,models=models,device=device).create()
     #model_handler.train_model(args.classifier)
-    model_handler.test_model(args.classifier)
+    model_handler.test_all()
     #model_handler.evaluate_results(args.classifier)

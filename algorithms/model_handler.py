@@ -21,3 +21,6 @@ class ModelHandler():
     def test_all(self):
         for model in self.models.values():
             model.test()
+    
+    def save_correct_incorrect_predictions_model(self,name,dataset,output_dir='results/predictions'):
+        self.models[name].save_correct_incorrect_predictions(dataset,output_dir + name)

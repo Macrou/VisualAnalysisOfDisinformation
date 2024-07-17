@@ -39,8 +39,5 @@ class KNeighborsModel(SimpleModel):
         plt.title('Normalized Confusion Matrix')
         plt.savefig(fname='results/plots/ConfusionMatrix.png',format='png')
         plt.clf()
-   
-    def save_correct_incorrect_predictions(self):
-        correct_indices = np.where(self.predictions == self.test_labels)[0]
-        incorrect_indices = np.where(self.predictions != self.test_labels)[0]
+
  

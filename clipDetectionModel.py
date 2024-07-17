@@ -3,7 +3,7 @@ from sklearn.neighbors import KNeighborsClassifier
 import torch
 import torch.utils
 from torch.utils.data import DataLoader
-from torchvision import datasets 
+from torchvision import datasets,transforms
 from sklearn.linear_model import LogisticRegression
 import clip
 from xgboost import XGBRFClassifier
@@ -24,8 +24,8 @@ parser.add_argument('--resume', '-r', action='store_true',
 args = parser.parse_args()
 
 filenames = {
-        'Logistic': './checkpoint/finalized_random_forest_model.sav',
-        'Random Forest': './checkpoint/finalized_logistic_regression_model.sav',
+        'Logistic':  './checkpoint/finalized_logistic_regression_model.sav',
+        'Random Forest': './checkpoint/finalized_random_forest_model.sav',
         'KNN': './checkpoint/finalized_k_model.sav',
         'XGBoost': './checkpoint/finalized_random_forest_model.sav'
 }
@@ -61,7 +61,7 @@ def get_features(dataset):
 
 if __name__ == "__main__":
     print('==> Getting features..')
-    train_features, train_labels = get_features(train)
+    #train_features, train_labels = get_features(train)
     test_features, test_labels = get_features(test)
     models = {
         'Logistic': LogisticRegression(C=10, max_iter=400, solver='newton-cg',n_jobs=-1),
@@ -70,9 +70,8 @@ if __name__ == "__main__":
         'XGBoost': XGBRFClassifier()
     }
     if args.resume:
-        models[args.classifier] = pickle(model,open(filenames[args.classifier],'rb'))
-    model_handler = ModelFactory(train_features,train_labels,test_features,test_labels,models=models,device=device).create()
+        models[args.classifier] = pickle.load(open(filenames[args.classifier],'rb'))
+    model_handler = ModelFactory(None,None,test_features,test_labels,models=models,device=device).create()
     #model_handler.train_model(args.classifier)
-    model_handler.test_model('Logistic')
-    model_handler.test_model('KNN')
+    model_handler.save_correct_incorrect_predictions_model(args.classifier,datasets.ImageFolder(root='dataset/test',transform=transforms.Resize((512,512))))
     #model_handler.evaluate_results(args.classifier)

@@ -34,10 +34,12 @@ class LinearRegressionModel(SimpleModel):
             test_labels (numpy.ndarray): _description_
         """
         self.model.fit(self.train_features, self.train_labels)
-        filename = './results/checkpoint/finalized_logistic_regression_model.sav'
-        pickle.dump(self.model, open(filename, 'wb'))
         self.predictions = self.model.predict(self.test_features)
 
+    def save(self):
+        filename = './results/checkpoint/finalized_logistic_regression_model.sav'
+        pickle.dump(self.model, open(filename, 'wb'))
+    
     def train_and_test(self):
         """Trains and tests a linear regression model.
         Args:
@@ -62,3 +64,5 @@ class LinearRegressionModel(SimpleModel):
         plt.title('Normalized Confusion Matrix')
         plt.savefig(fname='results/plots/ConfusionMatrix.png',format='png')
         plt.clf()
+
+    

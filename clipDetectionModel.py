@@ -36,10 +36,11 @@ model, preprocess = clip.load('ViT-B/32', device)
 if args.data == 'Fakeddit':  
     train = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_train.tsv",transform=preprocess)
     test =  Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv",transform=preprocess)
+    plaintest = Fakeddit(annotations_file="./dataset/multimodal_only_samples/multimodal_test_public.tsv")
 elif args.data == 'CIFAKE':
     train = datasets.ImageFolder(root='dataset/train',transform=preprocess)
     test = datasets.ImageFolder(root='dataset/test',transform=preprocess)
-
+    plaintest = datasets.ImageFolder(root='dataset/test',transform=transforms.Resize((512,512)))
 
 
 classes = ('false','real')
@@ -73,5 +74,5 @@ if __name__ == "__main__":
         models[args.classifier] = pickle.load(open(filenames[args.classifier],'rb'))
     model_handler = ModelFactory(None,None,test_features,test_labels,models=models,device=device).create()
     #model_handler.train_model(args.classifier)
-    model_handler.save_correct_incorrect_predictions_model(args.classifier,datasets.ImageFolder(root='dataset/test',transform=transforms.Resize((512,512))))
+    model_handler.save_correct_incorrect_predictions_model(args.classifier,plaintest)
     #model_handler.evaluate_results(args.classifier)

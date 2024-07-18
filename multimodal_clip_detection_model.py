@@ -13,7 +13,7 @@ from numpy.linalg import norm
 
 
 import clip
-from algorithms.model_factoy import ModelFactory
+from classifiers.model_factoy import ModelFactory
 from dataloaders.multimodal_fakeddit_data_loader import Multimodal_Fakeddit
 
 import numpy as np

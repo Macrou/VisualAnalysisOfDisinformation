@@ -1,8 +1,8 @@
-from algorithms.model_handler import ModelHandler
-from algorithms.k_neighbors import *
-from algorithms.random_forest import *
-from algorithms.linear_regression import *
-from algorithms.xgb_model import *
+from classifiers.model_handler import ModelHandler
+from classifiers.k_neighbors import *
+from classifiers.random_forest import *
+from classifiers.linear_regression import *
+from classifiers.xgb_model import *
 
 class ModelFactory():
     def __init__(self, train_features, train_labels, test_features, test_labels,models,device = 'cpu'):

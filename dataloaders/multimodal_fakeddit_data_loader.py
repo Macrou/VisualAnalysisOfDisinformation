@@ -3,6 +3,11 @@ import pandas as pd
 from dataloaders.fakeddit_data_loader import *
 
 class Multimodal_Fakeddit(Fakeddit):
+    """Multi
+
+    Args:
+        Fakeddit (_type_): _description_
+    """
     def __init__(self,annotations_file,tokenizer ,img_dir="dataset/public_image_set",
                  transform=None, target_transform=None ):
         super().__init__(annotations_file,img_dir,transform,target_transform)
@@ -30,7 +35,7 @@ class Multimodal_Fakeddit(Fakeddit):
             the index of the data in the dataset
         Returns
         -------
-        the image and the label after transformation 
+        the image title token and the label after transformation 
         '''
         name = self.id[idx] + '.jpg'
         path = os.path.join(self.img_dir,name)

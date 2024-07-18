@@ -46,12 +46,14 @@ class SimpleModel():
         incorrect_false_indices = np.where((self.predictions != self.test_labels) & (self.predictions == 0))[0]
 
 
-        def save_images(indices, subdir):
+        def save_images(indices, subdir,limit = 100):
             subdir_path = os.path.join(output_dir, subdir)
             if not os.path.exists(subdir_path):
                 os.makedirs(subdir_path)
-            
+            count = 0
             for idx in indices:
+                if count > limit:
+                    break
                 img, _ = dataset[idx]
                 label = self.test_labels[idx]
                 pred = self.predictions[idx]

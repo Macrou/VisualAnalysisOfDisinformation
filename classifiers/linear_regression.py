@@ -8,7 +8,12 @@ from sklearn.metrics import classification_report
 from classifiers.simple_model import SimpleModel
 import pickle
 
-class LinearRegressionModel(SimpleModel):
+class LogisticRegressionModel(SimpleModel):
+    """Logistic regression implementation of the model.
+
+    Args:
+        SimpleModel (_type_): Simple model it inherits from
+    """
     
     def train(self):
         print('==> Training logistic regression')

@@ -8,6 +8,11 @@ from classifiers.simple_model import SimpleModel
 import pickle
 
 class KNeighborsModel(SimpleModel):
+    """KNN implementation of the simple model
+
+    Args:
+        SimpleModel (_type_): Simple model
+    """
     def train(self):
         print('==> Training KNN')
         parameter={'n_neighbors': np.arange(2, 30, 1)}

@@ -11,17 +11,11 @@ from dataloaders.fakeddit_data_loader import Fakeddit
 import pickle
 
 from tqdm import tqdm
-import argparse
+from options_clip import args
 
 from classifiers.model_factoy import ModelFactory
 
 from dataloaders.fakeddit_data_loader import *
-parser = argparse.ArgumentParser(description='PyTorch Disinformation Training')
-parser.add_argument('--data','-d', choices=['Fakeddit', 'CIFAKE'],default='Fakeddit', type= str, help='data set')
-parser.add_argument('--classifier','-c',choices=['Logistic', 'Random Forest','KNN','XGBoost'],default='Logistic',type= str, help='classifier used')
-parser.add_argument('--resume', '-r', action='store_true',
-                    help='resume from checkpoint')
-args = parser.parse_args()
 
 filenames = {
         'Logistic':  './checkpoint/finalized_logistic_regression_model.sav',

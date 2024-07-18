@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 import os
 import argparse
-from options_clip import args
+from options_mu import args
 
 from dataloaders.multimodal_fakeddit_data_loader import Multimodal_Fakeddit
 

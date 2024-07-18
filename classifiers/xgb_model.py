@@ -15,6 +15,11 @@ from sklearn.metrics import classification_report
 from classifiers.simple_model import SimpleModel
 
 class XgbModel(SimpleModel):
+    """Xgboost implementation of the random forest.
+
+    Args:
+        SimpleModel (_type_): _description_
+    """
     def __init__(self, train_features, train_labels, test_features, test_labels, model=None,device = 'cuda'):
         super().__init__(train_features, train_labels, test_features, test_labels, model)
         self.device = device

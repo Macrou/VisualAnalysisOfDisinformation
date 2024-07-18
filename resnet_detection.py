@@ -24,6 +24,7 @@ parser.add_argument('--resume', '-r', action='store_true',
 parser.add_argument('--data','-d', choices=['Fakeddit', 'CIFAKE'],default='Fakeddit', type= str, help='data set')
 parser.add_argument('--test', '-t', action='store_true',
                     help='test the model without training')
+parser.add_argument('--net','-n',choices==['Resnet34','Resnet50'],type=str,help='resnet used')
 args = parser.parse_args()
 
 
@@ -73,7 +74,10 @@ testaccuracy = np.array([])
 
 # Model
 print('==> Building model..')
-net = resnet34(weights=ResNet34_Weights.DEFAULT)
+if args.net == 'Resnet34': 
+    net = resnet34(weights=ResNet34_Weights.DEFAULT)
+else:
+    net = resnet50(weights=ResNet50_Weights.DEFAULT)
 net = net.to(device)
 if device == 'cuda':
     net = torch.nn.DataParallel(net)

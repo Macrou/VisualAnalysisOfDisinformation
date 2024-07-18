@@ -75,6 +75,7 @@ if __name__ == "__main__":
     if args.resume:
         models[args.classifier] = pickle.load(open(filenames[args.classifier],'rb'))
     model_handler = ModelFactory(None,None,test_features,test_labels,models=models,device=device).create()
-    #model_handler.train_model(args.classifier)
+    model_handler.train_model(args.classifier)
+    model_handler.test_model(args.classifier)
     model_handler.save_correct_incorrect_predictions_model(args.classifier,plaintest)
-    #model_handler.evaluate_results(args.classifier)
+    model_handler.evaluate_results(args.classifier)

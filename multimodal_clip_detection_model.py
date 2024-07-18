@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 import os
 import argparse
-from options_mu import args
+from options_multimodal import args
 
 from dataloaders.multimodal_fakeddit_data_loader import Multimodal_Fakeddit
 
@@ -37,6 +37,14 @@ classes = ('false','real')
 
 
 def get_features(dataset):
+    """ Encodes the features of all samples from a dataset. 
+
+    Args:
+        dataset (_type_): The data set for which the features are extracted
+
+    Returns:
+        _type_: a list of features extracted from the samples
+    """
     all_features = []
     all_labels = []
 

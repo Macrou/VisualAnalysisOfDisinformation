@@ -12,23 +12,18 @@ import torch
 from xgboost import XGBRFClassifier
 from sklearn.model_selection import GridSearchCV,RandomizedSearchCV
 from sklearn.metrics import classification_report
-from algorithms.simple_model import SimpleModel
+from classifiers.simple_model import SimpleModel
 
 class XgbModel(SimpleModel):
+    """Xgboost implementation of the random forest.
+
+    Args:
+        SimpleModel (_type_): _description_
+    """
     def __init__(self, train_features, train_labels, test_features, test_labels, model=None,device = 'cuda'):
         super().__init__(train_features, train_labels, test_features, test_labels, model)
         self.device = device
     def train(self):
-        """Function for training the model for a Random Forest Classifier.
-
-        Args:
-            model (sklearn.ensemble.RandomForestClassifier): the classifier used for this training
-            train_features (numpy.ndarray): _description_
-            train_labels (numpy.ndarray): _description_
-
-        Returns:
-            sklearn.ensemble.RandomForestClassifier: Classifier with parameters tuned.  
-        """
         print('==> Training Random forest')
         param_dist = {
             'n_estimators':[int(x) for x in np.linspace(start = 100, stop = 1000, num = 10)],
@@ -46,29 +41,12 @@ class XgbModel(SimpleModel):
         self.model = grid_search.best_estimator_
 
     def test(self):
-        """Tests a model with the given test models.
-
-        Args:
-            model (sklearn.ensemble.RandomForestClassifier): _description_
-            train_features (numpy.ndarray): _description_
-            train_labels (numpy.ndarray): _description_
-            test_features (numpy.ndarray): _description_
-            test_labels (numpy.ndarray): _description_
-        """
         self.model.fit(self.train_features, self.train_labels)
         # predict the mode
         self.predictions = self.model.predict(self.test_features)
     
 
     def train_and_test(self):
-        """Trains and tests a random forest algorithm
-
-        Args:
-            train_features (_type_): _description_
-            train_labels (_type_): _description_
-            test_features (_type_): _description_
-            test_labels (_type_): _description_
-        """
         start_time = time.time()
         print(f'starts time is {start_time}')
         model = self.train()
@@ -91,9 +69,7 @@ class XgbModel(SimpleModel):
         plt.savefig(fname='results/plots/ConfusionMatrix.png',format='png')
         plt.clf()
         importance = self.model.feature_importances_
-        # summarize feature importance
         for i,v in enumerate(importance):
             print('Feature: %0d, Score: %.5f' % (i,v))
-        # plot feature importance
         plt.bar([x for x in range(len(importance))], importance)
         plt.savefig(fname='results/plots/FeatureImportance.png',format='png')

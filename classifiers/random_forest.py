@@ -10,21 +10,16 @@ from sklearn.metrics import RocCurveDisplay, ConfusionMatrixDisplay
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV,RandomizedSearchCV
 from sklearn.metrics import classification_report
-from algorithms.simple_model import SimpleModel
+from classifiers.simple_model import SimpleModel
 import pickle
 
 class RandomForestModel(SimpleModel):
+    """Random forest model. 
+
+    Args:
+        SimpleModel (SimpleModel): a simple model
+    """
     def train(self):
-        """Function for training the model for a Random Forest Classifier.
-
-        Args:
-            model (sklearn.ensemble.RandomForestClassifier): the classifier used for this training
-            train_features (numpy.ndarray): _description_
-            train_labels (numpy.ndarray): _description_
-
-        Returns:
-            sklearn.ensemble.RandomForestClassifier: Classifier with parameters tuned.  
-        """
         print('==> Training Random forest')
         n_estimators = [int(x) for x in np.linspace(start = 100, stop = 500, num = 10)]
         max_depth = [int(x) for x in np.linspace(10, 50, num = 11)]
@@ -44,15 +39,6 @@ class RandomForestModel(SimpleModel):
         self.model = grid_search.best_estimator_
 
     def test(self):
-        """Tests a model with the given test models.
-
-        Args:
-            model (sklearn.ensemble.RandomForestClassifier): _description_
-            train_features (numpy.ndarray): _description_
-            train_labels (numpy.ndarray): _description_
-            test_features (numpy.ndarray): _description_
-            test_labels (numpy.ndarray): _description_
-        """
         self.model.fit(self.train_features, self.train_labels)
         filename = './results/checkpoint/finalized_random_forest_model.sav'
         pickle.dump(self.model, open(filename, 'wb'))
@@ -62,14 +48,6 @@ class RandomForestModel(SimpleModel):
         
 
     def train_and_test(self):
-        """Trains and tests a random forest algorithm
-
-        Args:
-            train_features (_type_): _description_
-            train_labels (_type_): _description_
-            test_features (_type_): _description_
-            test_labels (_type_): _description_
-        """
         start_time = time.time()
         print(f'starts time is {start_time}')
         model = self.train()

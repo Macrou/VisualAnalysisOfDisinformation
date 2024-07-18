@@ -13,7 +13,7 @@ from numpy.linalg import norm
 
 
 import clip
-from algorithms.model_factoy import ModelFactory
+from classifiers.model_factoy import ModelFactory
 from dataloaders.multimodal_fakeddit_data_loader import Multimodal_Fakeddit
 
 import numpy as np
@@ -23,7 +23,7 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 import os
 import argparse
-from options_clip import args
+from options_mu import args
 
 from dataloaders.multimodal_fakeddit_data_loader import Multimodal_Fakeddit
 

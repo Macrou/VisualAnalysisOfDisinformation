@@ -1,32 +1,44 @@
+
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import RocCurveDisplay, ConfusionMatrixDisplay
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report
-from algorithms.simple_model import SimpleModel
+from classifiers.simple_model import SimpleModel
 import pickle
 
-class KNeighborsModel(SimpleModel):
+class LogisticRegressionModel(SimpleModel):
+    """Logistic regression implementation of the model.
+
+    Args:
+        SimpleModel (_type_): Simple model it inherits from
+    """
+    
     def train(self):
-        print('==> Training KNN')
-        parameter={'n_neighbors': np.arange(2, 30, 1)}
-        knn=KNeighborsClassifier()
-        knn_cv=RandomizedSearchCV(estimator = knn, param_distributions = parameter, 
-                                        n_iter = 50, cv = 5, verbose=2, random_state=42, n_jobs = 8)
-        knn_cv.fit(self.train_features, self.train_labels)
-        self.model = knn_cv.best_estimator_
+        print('==> Training logistic regression')
+        grid = {
+            'solver':['newton-cg', 'lbfgs', 'liblinear'],
+            'penalty': ['l2'],
+            'C': [100, 10, 1.0, 0.1, 0.01],
+            'max_iter' : [400]
+        }
+        knn= LogisticRegression()
+        model_cv=GridSearchCV(knn, param_grid=grid, cv=5, verbose=1)
+        model_cv.fit(self.train_features, self.train_labels)
+        self.model = model_cv.best_estimator_
         
     def test(self):
         self.model.fit(self.train_features, self.train_labels)
-        filename = './results/checkpoint/finalized_k_model.sav'
-        pickle.dump(self.model, open(filename, 'wb'))
         self.predictions = self.model.predict(self.test_features)
+        filename = './results/checkpoint/finalized_logistic_regression_model.sav'
+        pickle.dump(self.model, open(filename, 'wb'))
 
     def train_and_test(self):
         self.train()
+        print(self.model)
         self.test()
-        
+
     def evaluate_results(self):
         print(classification_report(self.predictions, self.test_labels))
         ax = plt.gca()
@@ -40,4 +52,4 @@ class KNeighborsModel(SimpleModel):
         plt.savefig(fname='results/plots/ConfusionMatrix.png',format='png')
         plt.clf()
 
- 
+    

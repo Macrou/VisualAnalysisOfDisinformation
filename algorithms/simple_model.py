@@ -58,6 +58,7 @@ class SimpleModel():
                 label = self.test_labels[idx]
                 pred = self.predictions[idx]
                 img.save(os.path.join(subdir_path, f'{idx}_pred{pred}_actual{label}.png'))
+                count +=1
 
         save_images(correct_true_indices, 'correct_true')
         save_images(incorrect_true_indices, 'incorrect_true')

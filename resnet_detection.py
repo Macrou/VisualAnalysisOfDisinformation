@@ -24,7 +24,7 @@ parser.add_argument('--resume', '-r', action='store_true',
 parser.add_argument('--data','-d', choices=['Fakeddit', 'CIFAKE'],default='Fakeddit', type= str, help='data set')
 parser.add_argument('--test', '-t', action='store_true',
                     help='test the model without training')
-parser.add_argument('--net','-n',choices==['Resnet34','Resnet50'],type=str,help='resnet used')
+parser.add_argument('--net','-n',choices=['Resnet34','Resnet50'],default='Resnet34',type=str,help='resnet used')
 args = parser.parse_args()
 
 
